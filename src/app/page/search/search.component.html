@@ -1,0 +1,103 @@
+<div class="px-[50px] bg-[#fff]">
+  <div class="">
+      <!-- Bread crumb -->
+      <div class="text-xs whitespace-nowrap">
+          <div class="py-4">
+              <div class="inline-block">
+                  <a
+                      href="/"
+                      class="text-[#999] hover:underline hover:text-black"
+                      >Trang chủ</a
+                  >
+              </div>
+              <div
+                  class="inline-block before:content-['/'] before:px-2 before:text-[#999]"
+              >
+                  <a
+                      href="#"
+                      class="text-black"
+                      >Quần áo nữ</a
+                  >
+              </div>
+          </div>
+      </div>
+
+      <!-- Filter -->
+      <!-- <div class="flex justify-end items-center mb-[15px] h-[40px] text-xs">
+          <label class="px-[22px]">Sắp xếp theo</label>
+          <select
+              ng-model="filter.sort"
+              ng-change="changeSort()"
+              class="w-[200px] border border-solid border-gray-300 focus:border-black focus:outline-none text-sm px-3 py-1.5"
+          >
+              <option ng-value="1">Hàng mới</option>
+              <option ng-value="2">Bán chạy</option>
+              <option ng-value="3">Giảm nhiều</option>
+              <option ng-value="4">Giá thấp đến cao</option>
+              <option ng-value="5">Giá cao đến thấp</option>
+          </select>
+      </div> -->
+  </div>
+
+  <div class="flex relative">
+      <!-- Filter -->
+      <div class="absolute left-0 -top-[40px] w-[190px]">
+          <a
+              href="/product"
+              class="flex justify-center items-center h-[36px] w-full text-[13px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
+          >
+              Xóa tất cả
+          </a>
+      </div>
+
+      <app-sidebar></app-sidebar>
+
+      <!-- <app-product></app-product> -->
+
+      <!-- List of Product -->
+      <div class="flex-1 pl-[20px]">
+          <div class="flex flex-wrap -mx-[10px]">
+              <!-- Normal -->
+              <div
+                  ng-repeat="x in [].constructor(8) track by $index"
+                  ng-if="isLoading"
+                  class="card w-1/4 px-[10px]"
+              >
+                  <div class="cover skeleton w-full pb-[132%]"></div>
+                  <div class="min-h-[116px]">
+                      <p class="mt-2 h-4 w-4/5 skeleton"></p>
+                      <p class="mt-[6px] w-3/4 h-5 skeleton"></p>
+                      <div class="flex mt-[6px]">
+                          <p
+                              class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                          ></p>
+                          <p
+                              class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                          ></p>
+                          <p
+                              class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                          ></p>
+                          <p
+                              class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                          ></p>
+                          <p
+                              class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                          ></p>
+                      </div>
+                  </div>
+              </div>
+
+
+          </div>
+
+          <!-- <div class="flex justify-end">
+              <dir-pagination-controls
+                  max-size="7"
+                  boundary-links="true"
+                  on-page-change="pageChanged(newPageNumber)"
+              >
+              </dir-pagination-controls>
+          </div> -->
+      </div>
+  </div>
+</div>
