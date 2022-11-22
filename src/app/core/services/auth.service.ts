@@ -10,13 +10,13 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthService {
 
-  public host: string = environment.BASE_API;
+  host: string = environment.BASE_API;
 
   constructor(private _http: HttpClient, private _storageService: StorageService) {
 
   }
 
-  public login(username: string, password: string): void {
+  login(username: string, password: string): void {
     let body = {
       email: username,
       password
@@ -32,7 +32,7 @@ export class AuthService {
       .post<any>(this.host + '/api/login/customer', body, options)
   }
 
-  public isAuthenticated(): boolean {
+  isAuthenticated(): boolean {
     if (this._storageService.getItem('CURRENT_CUSTOMER') != null) {
       return true;
     } else {
@@ -40,11 +40,13 @@ export class AuthService {
     }
   }
 
-  public getLoggedInUser(): Customer | null {
+  getLoggedInUser(): Customer | null {
     let customer: Customer | null;
     if (this.isAuthenticated()) {
       let userData: any = JSON.parse(this._storageService.getItem('CURRENT_CUSTOMER') ?? '{}');
-      customer = new Customer(userData.token, userData.token_type);
+      customer = new Customer();
+      customer.token_type = userData.token_type;
+      customer.token = userData.token
     } else {
       customer = null;
     }

@@ -8,5 +8,5 @@ export class Customer{
   public customer_address: string | null;
   public image: string | null;
   public token_type: string;
-  public token: string | null;
+  public token: string;
 }

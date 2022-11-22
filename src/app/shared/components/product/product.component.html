@@ -1,94 +1,92 @@
-<div class="w-1/4 px-[10px]">
-  <div class="w-full pb-[132%] h-0 relative overflow-hidden bg-[#f7f7f7] group">
-    <a
-      href="/details?product_id={{ product?.product_id }}"
-      class="w-full inline-block"
-    >
-      <img
-        src="/image/product/{{ product?.color_current?.product_image1 }}"
-        alt="{{ product?.product_name }}"
-        class="w-full"
-      />
-      <img
-        src="/image/product/{{
-          product?.color_current?.product_image2 ||
-            product?.color_current?.product_image3 ||
-            product?.color_current?.product_image4 ||
-            product?.color_current?.product_image5
-        }}"
-        alt="{{ product?.product_name }}"
-        class="w-full absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-500"
-      />
-    </a>
+<div class="w-full pb-[132%] h-0 relative overflow-hidden bg-[#f7f7f7] group">
+  <a
+    [routerLink]="['/detail']"
+    [queryParams]="{ product_id: product.product_id }"
+    class="w-full inline-block"
+  >
+    <img
+      src="{{ IMAGE_API }}/image/product/{{ product.picked.color.product_image1 }}"
+      alt="{{ product.product_name }}"
+      class="w-full"
+    />
+    <img
+      src="{{ IMAGE_API }}/image/product/{{
+        product.picked.color.product_image2 ||
+          product.picked.color.product_image3 ||
+          product.picked.color.product_image4 ||
+          product.picked.color.product_image5
+      }}"
+      alt="{{ product.product_name }}"
+      class="w-full absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-500"
+    />
+  </a>
+  <div
+    class="absolute bottom-0 left-0 right-0 px-[15px] py-[15px] transition-all group-hover:flex flex-wrap hidden"
+  >
     <div
-      class="absolute bottom-0 left-0 right-0 px-[15px] py-[15px] transition-all group-hover:flex flex-wrap hidden"
+      *ngFor="let s of product.picked.color.sizes"
+      ng-click="addToCartInProductPage(p, s)"
+      title="Còn {{ s.quantity }} sản phẩm"
+      class="flex justify-center items-center w-[48px] h-[43px] m-1 text-sm font-bold rounded-2xl bg-white cursor-pointer transition-all hover:bg-black hover:text-white"
     >
-      <div
-        *ngFor="let s of product?.color_current?.sizes"
-        ng-click="addToCartInProductPage(p, s)"
-        title="Còn {{ s.quantity }} sản phẩm"
-        class="flex justify-center items-center w-[48px] h-[43px] m-1 text-sm font-bold rounded-2xl bg-white cursor-pointer transition-all hover:bg-black hover:text-white"
-      >
-        {{ s.size_name }}
-      </div>
-    </div>
-    <!-- IF Discount -->
-    <div
-      ng-if="product?.product_discount != 0"
-      class="absolute top-[6px] left-0 w-[50px] text-center text-xs leading-[20px] bg-[#222] text-white"
-    >
-      -{{ product?.product_discount }}%
+      {{ s.size_name }}
     </div>
   </div>
-  <div class="min-h-[116px]">
-    <div class="mt-2 text-xs">
-      <a
-        href="/details?product_id={{ product?.product_id }}"
-        class="block w-full text-[#767676] overflow-hidden whitespace-nowrap text-ellipsis hover:text-black hover:underline"
-      >
-        {{ product?.product_name }}
-      </a>
-    </div>
-    <div class="mt-[6px] flex items-center">
-      <span
-        ng-if="product?.product_discount == 0"
-        class="text-black text-sm block font-bold"
-      >
-        {{ product?.color_current?.product_price | number: 0 }}₫
-      </span>
-      <!-- IF Discount -->
-      <span
-        ng-if="product?.product_discount != 0"
+  <!-- IF Discount -->
+  <div
+    *ngIf="product.product_discount != 0"
+    class="absolute top-[6px] left-0 w-[50px] text-center text-xs leading-[20px] bg-[#222] text-white"
+  >
+    -{{ product.product_discount }}%
+  </div>
+</div>
+<div class="min-h-[116px]">
+  <div class="mt-2 text-xs">
+    <a
+      [routerLink]="['/detail']"
+      [queryParams]="{ product_id: product.product_id }"
+      class="block w-full text-[#767676] overflow-hidden whitespace-nowrap text-ellipsis hover:text-black hover:underline"
+    >
+      {{ product.product_name }}
+    </a>
+  </div>
+  <div class="mt-[6px] flex items-center">
+    <span
+      *ngIf="product.product_discount == 0"
+      class="text-black text-sm block font-bold"
+    >
+      {{ product.picked.color.product_price | number }}₫
+    </span>
+    <!-- IF Discount -->
+    <span
+      *ngIf="product.product_discount != 0"
         class="text-[#fa6338] text-sm block font-bold mr-1"
       >
-        {{
-          product?.color_current?.product_price -
-            (product?.color_current?.product_price *
-              product?.product_discount) /
-              100 | number: 0
-        }}₫
-      </span>
-      <del ng-if="product?.product_discount != 0" class="text-[#999] text-xs">
-        {{ product?.color_current?.product_price | number: 0 }}₫
-      </del>
-    </div>
-    <div ng-if="product?.colors.length > 1" class="mt-[6px] flex">
-      <div
-        *ngFor="let cl of product?.colors"
-        ng-class="{
-          'border-black p-[2px]':
-            product?.color_current?.color_id == cl.color_id
-        }"
-        ng-mouseenter="changeColor(p, cl)"
-        title="{{ cl.color_name }}"
-        class="w-[25px] h-[25px] rounded-full border mr-2 cursor-pointer"
-      >
-        <img
-          src="/image/product/{{ cl.product_image1 }}"
-          alt="{{ cl.color_name }}"
-          class="w-full h-full object-cover rounded-full"
-        />
-      </div>
+      {{
+        product.picked.color.product_price -
+          (product.picked.color.product_price * product.product_discount) /
+            100 | number
+      }}₫
+    </span>
+    <del *ngIf="product.product_discount != 0" class="text-[#999] text-xs">
+      {{ product.picked.color.product_price | number }}₫
+    </del>
+  </div>
+  <div *ngIf="product.colors.length > 1" class="mt-[6px] flex">
+    <div
+      *ngFor="let cl of product.colors"
+      [ngClass]="{
+        'border-black p-[2px]': product.picked.color.color_id == cl.color_id
+      }"
+      (mouseenter)="changeColor(product, cl)"
+      title="{{ cl.color_name }}"
+      class="w-[25px] h-[25px] rounded-full border mr-2 cursor-pointer"
+    >
+      <img
+        src="{{ IMAGE_API }}/image/product/{{ cl.product_image1 }}"
+        alt="{{ cl.color_name }}"
+        class="w-full h-full object-cover rounded-full"
+      />
     </div>
   </div>
 </div>

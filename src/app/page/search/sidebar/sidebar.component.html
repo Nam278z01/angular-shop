@@ -1,98 +1,84 @@
-<div class="w-[205px] pr-[15px] pb-[10px]">
-  <div
-      class="scrollbar overflow-y-scroll sticky top-[54px] border-t border-[rgba(0,0,0,0.05] w-full h-[90vh]"
-  >
-      <div class="pt-5 pb-4">
-          <div class="font-semibold text-sm flex items-center">
-              <i class="bx bx-menu-alt-left text-xl"></i>
-              <span class="ml-3 font-bold">DANH MỤC</span>
-          </div>
-          <!-- <ul class="mt-3 text-[13px]">
-              <li
-                  class="leading-7 capitalize"
-                  ng-click="changeCategory(undefine, false, null)"
-              >
-                  <span
-                      ng-class="{'text-[#fa6338]': changeCategory(undefine, true)}"
-                      class="text-black font-bold hover:text-[#fa6338] cursor-pointer"
-                      >Tất cả</span
-                  >
-              </li>
-              <li
-                  ng-repeat="c in categories"
-                  class="leading-7 capitalize"
-                  ng-click="changeCategory(c.category_id, false, c)"
-              >
-                  <span
-                      ng-class="{'text-[#fa6338]': changeCategory(c.category_id, true, c)}"
-                      class="text-black font-bold hover:text-[#fa6338] cursor-pointer"
-                      >{{ c.category_name }}</span
-                  >
-              </li>
-          </ul> -->
+<div
+  class="scrollbar overflow-y-scroll sticky top-[54px] border-t border-[rgba(0,0,0,0.05] w-full h-[90vh]"
+>
+  <div class="pt-5 pb-4">
+    <div class="font-semibold text-sm flex items-center">
+      <i class="bx bx-menu-alt-left text-xl"></i>
+      <span class="ml-3 font-bold">DANH MỤC</span>
+    </div>
+    <ul class="mt-3 text-[13px]">
+      <li
+        class="leading-7 capitalize"
+        (click)="changeCategory(undefined, false, null)"
+      >
+        <span
+          [ngClass]="{
+            'text-[#fa6338]': changeCategory(undefined, true, null)
+          }"
+          class="text-black font-bold hover:text-[#fa6338] cursor-pointer"
+          >Tất cả</span
+        >
+      </li>
+      <li
+        *ngFor="let c of categories"
+        class="leading-7 capitalize"
+        (click)="changeCategory(c.category_id, false, c)"
+      >
+        <span
+          [ngClass]="{
+            'text-[#fa6338]': changeCategory(c.category_id, true, c)
+          }"
+          class="text-black font-bold hover:text-[#fa6338] cursor-pointer"
+          >{{ c.category_name }}</span
+        >
+      </li>
+    </ul>
+  </div>
+  <div class="pt-5 pb-4">
+    <div class="font-semibold text-sm flex items-center">
+      <i class="bx bx-filter text-xl"></i>
+      <span class="ml-3 font-bold">BỘ LỌC</span>
+    </div>
+    <div
+      class="py-5 text-[13px] border-b border-[rgba(0,0,0,0.05] w-full"
+      *ngIf="subcategories.length > 0"
+    >
+      <div class="capitalize font-bold mb-2">Theo danh mục</div>
+      <label
+        *ngFor="let sc of subcategories"
+        (click)="changeSubCategories(sc)"
+        class="h-[28px] capitalize flex items-center cursor-pointer"
+      >
+        <input *ngIf="sc.checked" type="checkbox" class="mr-2" checked />
+        <input *ngIf="!sc.checked" type="checkbox" class="mr-2" />
+        <span class="text-[#000000cc] font-semibold hover:text-[#fa6338]">{{
+          sc.subcategory_name
+        }}</span>
+      </label>
+    </div>
+    <div class="py-5 text-[13px]">
+      <div class="capitalize font-bold mb-2">Khoảng giá</div>
+      <div class="flex items-center py-3 w-full justify-between">
+        <input
+          [(ngModel)]="searchParams.min_price"
+          type="text"
+          class="w-[75px] h-[32px] border border-[rgb(0 0 0 / 10%)] px-2 focus:outline-none focus:border-black text-xs"
+          placeholder="₫ TỪ"
+        />
+        <i class="bx bx-minus text-xl text-[rgb(0 0 0 / 10%)]"></i>
+        <input
+          [(ngModel)]="searchParams.max_price"
+          type="text"
+          class="w-[75px] h-[32px] border border-[rgb(0 0 0 / 10%)] px-2 focus:outline-none focus:border-black text-xs"
+          placeholder="₫ ĐẾN"
+        />
       </div>
-      <div class="pt-5 pb-4">
-          <!-- <div class="font-semibold text-sm flex items-center">
-              <i class="bx bx-filter text-xl"></i>
-              <span class="ml-3 font-bold">BỘ LỌC</span>
-          </div>
-          <div
-              class="py-5 text-[13px] border-b border-[rgba(0,0,0,0.05] w-full"
-              ng-if="subcategories.length > 0"
-          >
-              <div class="capitalize font-bold mb-2">
-                  Theo danh mục
-              </div>
-              <label
-                  ng-repeat="sc in subcategories"
-                  ng-click="changeSubCategories(sc)"
-                  class="h-[28px] capitalize flex items-center cursor-pointer"
-              >
-                  <input
-                      ng-if="sc.checked"
-                      type="checkbox"
-                      class="mr-2"
-                      checked
-                  />
-                  <input
-                      ng-if="!sc.checked"
-                      type="checkbox"
-                      class="mr-2"
-                  />
-                  <span
-                      class="text-[#000000cc] font-semibold hover:text-[#fa6338]"
-                      >{{ sc.subcategory_name }}</span
-                  >
-              </label>
-          </div>
-          <div class="py-5 text-[13px]">
-              <div class="capitalize font-bold mb-2">Khoảng giá</div>
-              <div
-                  class="flex items-center py-3 w-full justify-between"
-              >
-                  <input
-                      ng-model="filter.min_price"
-                      type="text"
-                      class="w-[75px] h-[32px] border border-[rgb(0 0 0 / 10%)] px-2 focus:outline-none focus:border-black text-xs"
-                      placeholder="₫ TỪ"
-                  />
-                  <i
-                      class="bx bx-minus text-xl text-[rgb(0 0 0 / 10%)]"
-                  ></i>
-                  <input
-                      ng-model="filter.max_price"
-                      type="text"
-                      class="w-[75px] h-[32px] border border-[rgb(0 0 0 / 10%)] px-2 focus:outline-none focus:border-black text-xs"
-                      placeholder="₫ ĐẾN"
-                  />
-              </div>
-              <button
-                  ng-click="changePrice()"
-                  class="w-full h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-[#fa6338] hover:bg-[#d73211]"
-              >
-                  ÁP DỤNG
-              </button>
-          </div> -->
-      </div>
+      <button
+        (click)="changePrice()"
+        class="w-full h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-[#fa6338] hover:bg-[#d73211]"
+      >
+        ÁP DỤNG
+      </button>
+    </div>
   </div>
 </div>

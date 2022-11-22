@@ -1,268 +1,223 @@
 <header class="h-[54px]">
   <div class="fixed left-0 w-full z-40">
-      <!-- Navigation -->
-      <nav
-          class="relative flex items-center h-[54px] w-full px-5 shadow-[0_6px_12px_0_#0000000a] bg-[#fff] border-b border-transparent hover:bg-[#f7f8fa]"
-      >
-          <div class="flex h-[54px] items-center w-3/4">
-              <div>
-                  <a
-                      href="#"
-                      class="relative inline-block h-[54px] px-[15px] text-black text-3xl font-bold leading-[54px]"
+    <!-- Navigation -->
+    <nav
+      class="relative flex items-center h-[54px] w-full px-5 shadow-[0_6px_12px_0_#0000000a] bg-[#fff] border-b border-transparent hover:bg-[#f7f8fa]"
+    >
+      <div class="flex h-[54px] items-center w-3/4">
+        <div>
+          <a
+            routerLink=""
+            class="relative inline-block h-[54px] px-[15px] text-black text-3xl font-bold leading-[54px]"
+          >
+            <div class="h-[54px]" style="font-family: 'Beau Rivage', cursive">
+              Sheyn
+            </div>
+          </a>
+        </div>
+        <div class="group">
+          <a
+            routerLink=""
+            routerLinkActive="text-[#8e8e8e]"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px]"
+          >
+            <div class="h-[54px]">Trang Chủ</div>
+          </a>
+        </div>
+        <div class="group">
+          <a
+            href="#"
+            class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px]"
+          >
+            <div class="h-[54px]">Hàng Mới</div>
+          </a>
+        </div>
+        <div class="group">
+          <a
+            href="#"
+            class="relative inline-block h-[54px] px-[15px] text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px] text-[#ed354b]"
+          >
+            <div class="h-[54px]">SALE</div>
+          </a>
+        </div>
+        <div class="group">
+          <a
+            href="#"
+            class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px]"
+          >
+            <div class="h-[54px]">Xu Hướng</div>
+          </a>
+        </div>
+        <div class="group pointer-events-none">
+          <a
+            routerLink="/search"
+            routerLinkActive="text-[#8e8e8e]"
+            class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px] pointer-events-auto"
+          >
+            <div class="h-[54px]">Trang Phục</div>
+          </a>
+          <nav
+            class="absolute z-10 top-full left-0 right-0 py-[20px] bg-white invisible group-hover:visible transition-all pointer-events-auto"
+          >
+            <div class="flex flex-wrap h-[300px] justify-center">
+              <div class="px-[15px] text-[13px] w-[400px]">
+                <h6 class="font-bold text-[#8e8e8e]">Danh Mục</h6>
+                <ul class="mt-5 flex flex-col flex-wrap h-[270px]">
+                  <li class="leading-7 capitalize w-2/4">
+                    <a
+                      routerLink="/search"
+                      routerLinkActive="text-[#fa6338]"
+                      [routerLinkActiveOptions]="{ exact: true }"
+                      class="text-black font-bold hover:text-[#fa6338]"
+                      >Tất cả</a
+                    >
+                  </li>
+                  <li
+                    *ngFor="let c of categories"
+                    class="leading-7 capitalize w-2/4"
                   >
-                      <div
-                          class="h-[54px]"
-                          style="font-family: 'Beau Rivage', cursive"
-                      >
-                          Sheyn
-                      </div>
-                  </a>
+                    <a
+                      [routerLink]="['/search']"
+                      [queryParams]="{ category_id: c.category_id }"
+                      routerLinkActive="text-[#fa6338]"
+                      class="text-black font-bold hover:text-[#fa6338]"
+                      >{{ c.category_name }}</a
+                    >
+                  </li>
+                </ul>
               </div>
-              <div class="group">
-                  <a
-                      href="/"
-                      class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px]"
-                  >
-                      <div
-                          ng-class="{
-                              'text-[#8e8e8e]': activeNavigation('/')
-                          }"
-                          class="h-[54px]"
-                      >
-                          Trang Chủ
-                      </div>
-                  </a>
+              <div class="px-[15px] text-[13px] w-[200px]">
+                <h6 class="font-bold text-[#8e8e8e]">Xu Hướng</h6>
+                <ul class="mt-5">
+                  <li class="leading-7 capitalize">
+                    <a
+                      [routerLink]="['/search']"
+                      [queryParams]="{ sort: 1 }"
+                      routerLinkActive="text-[#fa6338]"
+                      href="/search?sort=1"
+                      class="text-black font-bold hover:text-[#fa6338]"
+                      >Hàng mới nhất</a
+                    >
+                  </li>
+                  <li class="leading-7 capitalize">
+                    <a
+                      [routerLink]="['/search']"
+                      [queryParams]="{ sort: 2 }"
+                      routerLinkActive="text-[#fa6338]"
+                      class="text-black font-bold hover:text-[#fa6338]"
+                      >Bán chạy nhất</a
+                    >
+                  </li>
+                  <li class="leading-7 capitalize">
+                    <a
+                      [routerLink]="['/search']"
+                      [queryParams]="{ sort: 3 }"
+                      routerLinkActive="text-[#fa6338]"
+                      class="text-black font-bold hover:text-[#fa6338]"
+                      >Giảm giá nhiều nhất</a
+                    >
+                  </li>
+                </ul>
               </div>
-              <div class="group">
-                  <a
-                      href="#"
-                      class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px]"
-                  >
-                      <div class="h-[54px]">Hàng Mới</div>
-                  </a>
-              </div>
-              <div class="group">
-                  <a
-                      href="#"
-                      class="relative inline-block h-[54px] px-[15px] text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px] text-[#ed354b]"
-                  >
-                      <div class="h-[54px]">SALE</div>
-                  </a>
-              </div>
-              <div class="group">
-                  <a
-                      href="#"
-                      class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px]"
-                  >
-                      <div class="h-[54px]">Xu Hướng</div>
-                  </a>
-              </div>
-              <div class="group pointer-events-none">
-                  <a
-                      href="/search"
-                      class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px] pointer-events-auto"
-                  >
-                      <div
-                          ng-class="{
-                              'text-[#8e8e8e]': activeNavigation('/search')
-                          }"
-                          class="h-[54px]"
-                      >
-                          Trang Phục
-                      </div>
-                  </a>
-                  <nav
-                      class="absolute z-10 top-full left-0 right-0 py-[20px] bg-white invisible group-hover:visible transition-all pointer-events-auto"
-                  >
-                      <div class="flex flex-wrap h-[300px] justify-center">
-                          <div class="px-[15px] text-[13px] w-[400px]">
-                              <h6 class="font-bold text-[#8e8e8e]">
-                                  Danh Mục
-                              </h6>
-                              <ul
-                                  class="mt-5 flex flex-col flex-wrap h-[270px]"
-                              >
-                                  <li class="leading-7 capitalize w-2/4">
-                                      <a
-                                          href="/search"
-                                          ng-class="{
-                                              'text-[#fa6338]':
-                                                  changeCategory(
-                                                      undefined,
-                                                      true
-                                                  )
-                                          }"
-                                          class="text-black font-bold hover:text-[#fa6338]"
-                                          >Tất cả</a
-                                      >
-                                  </li>
-                                  <li
-                                      *ngFor="let c of categories"
-                                      class="leading-7 capitalize w-2/4"
-                                  >
-                                      <a
-                                          href="/search?category_id={{
-                                              c.category_id
-                                          }}"
-                                          ng-class="{
-                                              'text-[#fa6338]':
-                                                  changeCategory(
-                                                      c.category_id,
-                                                      true
-                                                  )
-                                          }"
-                                          class="text-black font-bold hover:text-[#fa6338]"
-                                          >{{ c.category_name }}</a
-                                      >
-                                  </li>
-                              </ul>
-                          </div>
-                          <div class="px-[15px] text-[13px] w-[200px]">
-                              <h6 class="font-bold text-[#8e8e8e]">
-                                  Xu Hướng
-                              </h6>
-                              <ul class="mt-5">
-                                  <li class="leading-7 capitalize">
-                                      <a
-                                          ng-class="{
-                                              'text-[#fa6338]': changeSort(
-                                                  true,
-                                                  1
-                                              )
-                                          }"
-                                          href="/search?sort=1"
-                                          class="text-black font-bold hover:text-[#fa6338]"
-                                          >Hàng mới nhất</a
-                                      >
-                                  </li>
-                                  <li class="leading-7 capitalize">
-                                      <a
-                                          ng-class="{
-                                              'text-[#fa6338]': changeSort(
-                                                  true,
-                                                  2
-                                              )
-                                          }"
-                                          href="/search?sort=2"
-                                          class="text-black font-bold hover:text-[#fa6338]"
-                                          >Bán chạy nhất</a
-                                      >
-                                  </li>
-                                  <li class="leading-7 capitalize">
-                                      <a
-                                          ng-class="{
-                                              'text-[#fa6338]': changeSort(
-                                                  true,
-                                                  3
-                                              )
-                                          }"
-                                          href="/search?sort=3"
-                                          class="text-black font-bold hover:text-[#fa6338]"
-                                          >Giảm giá nhiều nhất</a
-                                      >
-                                  </li>
-                              </ul>
-                          </div>
-                      </div>
-                  </nav>
-                  <div
-                      class="absolute bg-[rgba(0,0,0,.5)] top-full left-0 w-full h-[100vh] pointer-events-none invisible group-hover:visible transition-all"
-                  ></div>
-              </div>
-              <div class="group">
-                  <a
-                      href="#"
-                      class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px]"
-                  >
-                      <div class="h-[54px]">Giới Thiệu</div>
-                  </a>
-              </div>
-          </div>
+            </div>
+          </nav>
+          <div
+            class="absolute bg-[rgba(0,0,0,.5)] top-full left-0 w-full h-[100vh] pointer-events-none invisible group-hover:visible transition-all"
+          ></div>
+        </div>
+        <div class="group">
+          <a
+            href="#"
+            class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px]"
+          >
+            <div class="h-[54px]">Giới Thiệu</div>
+          </a>
+        </div>
+      </div>
 
-          <!-- Search -->
-          <form class="w-[250px] h-[40px] relative">
-              <input
-                  ng-model="text_search"
-                  type="text"
-                  placeholder="Tìm kiếm sản phẩm..."
-                  class="h-full w-full border border-[rgb(0 0 0 / 10%)] pl-3 pr-14 focus:outline-none focus:border-black text-xs"
-              />
-              <button
-                  ng-click="search()"
-                  class="absolute top-0 right-0 w-[40px] h-[40px] text-[30px] flex justify-center items-center text-white bg-black hover:bg-[rgba(34,34,34,.8)]"
-              >
-                  <i class="bx bx-search-alt-2"></i>
-              </button>
-          </form>
+      <!-- Search -->
+      <form class="w-[250px] h-[40px] relative">
+        <input
+          [(ngModel)]="text_search"
+          name="text_search"
+          type="text"
+          placeholder="Tìm kiếm sản phẩm..."
+          class="h-full w-full border border-[rgb(0 0 0 / 10%)] pl-3 pr-14 focus:outline-none focus:border-black text-xs"
+        />
+        <button
+          (click)="search()"
+          class="absolute top-0 right-0 w-[40px] h-[40px] text-[30px] flex justify-center items-center text-white bg-black hover:bg-[rgba(34,34,34,.8)]"
+        >
+          <i class="bx bx-search-alt-2"></i>
+        </button>
+      </form>
 
-          <!-- User/Cart -->
-          <div class="flex h-[54px] justify-end text-black ml-5 pr-[15px]">
-              <div class="h-[54px] group">
-                  <a
-                      ng-class="{ 'bg-white': activeNavigation('/cart') }"
-                      href="#"
-                      class="relative h-[54px] flex justify-center items-center text-3xl ml-1 px-1 cursor-pointer group-hover:bg-white hover:bg-white"
-                  >
-                      <i ng-if="!is_login" class="bx bx-user"></i>
-                      <!-- <img
+      <!-- User/Cart -->
+      <div class="flex h-[54px] justify-end text-black ml-5 pr-[15px]">
+        <div class="h-[54px] group">
+          <a
+            ng-class="{ 'bg-white': activeNavigation('/cart') }"
+            href="#"
+            class="relative h-[54px] flex justify-center items-center text-3xl ml-1 px-1 cursor-pointer group-hover:bg-white hover:bg-white"
+          >
+            <i ng-if="!is_login" class="bx bx-user"></i>
+            <!-- <img
                           ng-if="is_login"
                           class="rounded-full h-[30px] w-[30px]"
                           ng-src="/image/img/{{ customer.image }}"
                           alt="Avatar"
                       /> -->
-                  </a>
-                  <div
-                      class="absolute top-[54px] right-0 min-w-[180px] bg-white shadow-[0_6px_6px_0_#00000014] invisible group-hover:visible"
-                  >
-                      <div class="mx-[20px] mb-[10px]">
-                          <div
-                              ng-if="!is_login"
-                              ng-click="showModalLogin()"
-                              class="border-b border-[#0000001a] text-xs leading-[45px] text-[#000000cc] font-bold cursor-pointer hover:text-black"
-                          >
-                              Đăng nhập / Đăng ký
-                          </div>
-                          <!-- <a
+          </a>
+          <div
+            class="absolute top-[54px] right-0 min-w-[180px] bg-white shadow-[0_6px_6px_0_#00000014] invisible group-hover:visible"
+          >
+            <div class="mx-[20px] mb-[10px]">
+              <div
+                ng-if="!is_login"
+                ng-click="showModalLogin()"
+                class="border-b border-[#0000001a] text-xs leading-[45px] text-[#000000cc] font-bold cursor-pointer hover:text-black"
+              >
+                Đăng nhập / Đăng ký
+              </div>
+              <!-- <a
                               href="#"
                               ng-if="is_login"
                               class="block border-b border-[#0000001a] text-xs leading-[45px] text-[#000000cc] font-bold cursor-pointer hover:text-black"
                           >
                               {{ customer.customer_name }}
                           </a> -->
-                          <a
-                              ng-if="is_login"
-                              href="/orders"
-                              class="text-xs leading-[36px] text-[#00000099] hover:text-[#222]"
-                          >
-                              Đơn hàng của tôi
-                          </a>
-                          <div
-                              ng-if="is_login"
-                              ng-click="logout()"
-                              class="text-xs leading-[36px] text-[#00000099] hover:text-[#222] cursor-pointer"
-                          >
-                              Đăng xuất
-                          </div>
-                      </div>
-                  </div>
+              <a
+                ng-if="is_login"
+                href="/orders"
+                class="text-xs leading-[36px] text-[#00000099] hover:text-[#222]"
+              >
+                Đơn hàng của tôi
+              </a>
+              <div
+                ng-if="is_login"
+                ng-click="logout()"
+                class="text-xs leading-[36px] text-[#00000099] hover:text-[#222] cursor-pointer"
+              >
+                Đăng xuất
               </div>
-              <div class="h-[54px] group">
-                  <a
-                      ng-class="{ 'bg-white': activeNavigation('/cart') }"
-                      href="/cart"
-                      class="relative h-[54px] flex justify-center items-center text-3xl ml-1 px-1 cursor-pointer group-hover:bg-white hover:bg-white"
-                  >
-                      <i
-                          class="bx bx-cart"
-                          ng-class="{ 'bx-tada': cart.length > 0 }"
-                      ></i>
-                      <!-- <span
+            </div>
+          </div>
+        </div>
+        <div class="h-[54px] group">
+          <a
+            ng-class="{ 'bg-white': activeNavigation('/cart') }"
+            href="/cart"
+            class="relative h-[54px] flex justify-center items-center text-3xl ml-1 px-1 cursor-pointer group-hover:bg-white hover:bg-white"
+          >
+            <i class="bx bx-cart" ng-class="{ 'bx-tada': cart.length > 0 }"></i>
+            <!-- <span
                           ng-if="cart.length > 0"
                           class="text-[#fa6338] text-sm font-bold ml-1 absolute left-1/2 top-[10px] bg-[rgba(255,255,255,0.9)] min-w-[15px] min-h-[15px] text-center block rounded-full"
                           >{{ cart.length }}</span
                       > -->
-                  </a>
-                  <!-- <div
+          </a>
+          <!-- <div
                       ng-class="{'invisible' : !isShowCart}"
                       class="absolute top-[54px] right-0 w-[400px] bg-white shadow-[0_6px_6px_0_#00000014] group-hover:visible"
                   >
@@ -430,8 +385,8 @@
                           </a>
                       </div>
                   </div> -->
-              </div>
-          </div>
-      </nav>
+        </div>
+      </div>
+    </nav>
   </div>
 </header>

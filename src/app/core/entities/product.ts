@@ -8,5 +8,5 @@ export class Product {
   public max_price: number;
   public min_price: number;
   public colors: Color[];
-  public color_current: Color;
+  public picked: any;
 }

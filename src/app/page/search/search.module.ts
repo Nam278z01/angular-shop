@@ -1,5 +1,6 @@
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ProductModule } from 'src/app/shared/components/product/product.module';
@@ -14,6 +15,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   imports: [
     SharedModule,
     ProductModule,
+    NgxPaginationModule,
     RouterModule.forChild([
       { path: '', component: SearchComponent }
     ])

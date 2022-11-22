@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpEvent, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
@@ -12,14 +12,14 @@ import { StorageService } from './storage.service';
 })
 export class ApiService {
 
-  public customer: Customer | null;
-  public host = environment.BASE_API;
+  customer: Customer | null;
+  host = environment.BASE_API;
 
   constructor(private _http: HttpClient, private _authService: AuthService, private _storageService: StorageService) {
     this.customer = this._authService.getLoggedInUser();
   }
 
-  public get<T>(url: string, withToken: boolean = true) {
+  get<T>(url: string, params: any = {}, withToken: boolean = true) {
     let header: any = {}
     header['Content-Type'] = 'application/json';
 
@@ -28,13 +28,14 @@ export class ApiService {
     }
 
     let options: any = {
-      headers: new HttpHeaders(header)
+      headers: new HttpHeaders(header),
+      params: this.getHttpParams(params)
     }
 
-    return this._http.get<T>(this.host + url, options);
+    return this._http.get<T>(this.host + url, options );
   }
 
-  public post(url: string, withToken: boolean = true, body: any) {
+  post(url: string, body: any, params: any = {}, withToken: boolean = true, ) {
     let header: any = {}
     header['Content-Type'] = 'application/json';
 
@@ -43,10 +44,21 @@ export class ApiService {
     }
 
     let options: any = {
-      headers: new HttpHeaders(header)
+      headers: new HttpHeaders(header),
+      params: this.getHttpParams(params)
     }
 
     return this._http
       .post<any>(this.host + url, body, options)
   }
+
+  getHttpParams(params : any) : HttpParams {
+    let httpParams : HttpParams  = new HttpParams();
+    Object.keys(params).forEach(key => {
+      if (params[key]) {
+        httpParams = httpParams.append(key , params[key]);
+      }
+    });
+     return httpParams;
+   }
 }
