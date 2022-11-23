@@ -7,6 +7,7 @@ export class Customer{
   public customer_phone: string | null;
   public customer_address: string | null;
   public image: string | null;
+  public note: string | null;
   public token_type: string;
-  public token: string;
+  public access_token: string;
 }

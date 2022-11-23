@@ -1,0 +1,353 @@
+<div class="px-[50px] pb-[30px] bg-[#fafafc]">
+  <div class="flex">
+    <!-- Info customer -->
+    <div class="w-[50%] p-[20px] relative">
+      <!-- Info -->
+      <div class="sticky top-[84px]">
+        <div>
+          <div>
+            <div class="mb-[20px] mt-[10px] text-xl font-semibold italic">
+              Thông tin vận chuyển
+            </div>
+          </div>
+          <div class="p-[30px] bg-white shadow-[0_6px_12px_0_#0000000a]">
+            <div class="py-[15px] relative">
+              <label
+                for=""
+                class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white"
+                >Họ tên</label
+              >
+              <input
+                [(ngModel)]="customer.customer_name"
+                type="text"
+                placeholder="Họ tên"
+                class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
+              />
+            </div>
+            <div class="py-[15px] relative">
+              <label
+                for=""
+                class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white"
+                >Số điện thoại</label
+              >
+              <input
+                (keypress)="_cartService.validateNumber2($event)"
+                [(ngModel)]="customer.customer_phone"
+                type="text"
+                placeholder="Số điện thoại"
+                class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
+              />
+            </div>
+            <div class="py-[15px] relative">
+              <label
+                for=""
+                class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white"
+                >Địa chỉ chi tiết</label
+              >
+              <input
+                [(ngModel)]="customer.customer_address"
+                type="text"
+                placeholder="Địa chỉ chi tiết"
+                class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
+              />
+            </div>
+            <div class="py-[15px] relative">
+              <label
+                for=""
+                class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white"
+                >Ghi chú</label
+              >
+              <input
+                [(ngModel)]="customer.note"
+                type="text"
+                placeholder="Ghi chú"
+                class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div>
+          <div>
+            <div class="mb-[20px] mt-[30px] text-xl font-semibold italic">
+              Hình thức thanh toán
+            </div>
+          </div>
+          <div class="p-[30px] bg-white shadow-[0_6px_12px_0_#0000000a]">
+            <label
+              for="payment-cod"
+              class="flex items-center px-[20px] py-[15px] border border-black rounded-2xl"
+            >
+              <div
+                class="w-[20px] h-[20px] rounded-full border border-black relative"
+              >
+                <input
+                  type="radio"
+                  id="payment-cod"
+                  name="payment-method"
+                  class="hidden peer"
+                  checked
+                />
+                <span
+                  class="w-[12px] h-[12px] rounded-full bg-black absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 hidden peer-checked:block"
+                ></span>
+              </div>
+              <div class="mx-[15px]">
+                <img src="assets/image/static/COD.svg" alt="Image" />
+              </div>
+              <div class="text-[13px] font-medium italic">
+                COD <br />
+                Thanh toán khi nhận hàng
+              </div>
+            </label>
+
+            <div class="mt-[30px] relative">
+              <button
+                (click)="checkout()"
+                class="h-[54px] w-full text-[18px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
+              >
+                THANH TOÁN {{ total_price | number }}₫ (COD)
+              </button>
+              <div
+                *ngIf="isPaying"
+                class="absolute top-0 left-0 bottom-0 right-0 flex justify-center items-center bg-[#f0f0f0cc]"
+              >
+                <i
+                  class="bx bx-loader-circle bx-spin bx-rotate-90 text-2xl"
+                ></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Cart details -->
+    <div class="w-[50%] p-[20px]">
+      <div>
+        <div class="mb-[20px] mt-[10px] text-xl font-semibold italic">
+          Giỏ hàng
+        </div>
+      </div>
+      <div class="p-[30px] bg-white shadow-[0_6px_12px_0_#0000000a]">
+        <div *ngIf="!cart || cart.length == 0">
+          <img
+            class="w-[64px] h-[64px] m-auto"
+            src="assets/image/static/cart-empty.png"
+            alt="Giỏ hàng rỗng"
+          />
+          <span class="m-[20px] text-[#666] text-center block text-xs"
+            >Giỏ hàng rỗng</span
+          >
+        </div>
+        <div *ngIf="cart.length > 0" class="flex mb-[15px]">
+          <label class="relative cursor-pointer pl-[20px] flex">
+            <input
+              type="checkbox"
+              class="invisible peer"
+              [(ngModel)]="chose_all.value"
+              (ngModelChange)="choseAll()"
+            />
+            <span
+              class="absolute top-0 left-0 h-[20px] w-[20px] bg-[#eee] peer-checked:bg-black peer-checked:after:block after:absolute after:hidden after:w-[5px] after:h-[10px] after:top-[5px] after:left-[7px] after:border-[3px] after:border-t-0 after:border-l-0 after:border-white after:rotate-45"
+            ></span>
+            <div class="text-sm italic">Chọn tất cả</div>
+          </label>
+        </div>
+        <!-- Items -->
+        <div
+          [ngClass]="{
+            'opacity-50': product.picked.quantity > product.picked.size.quantity
+          }"
+          *ngFor="let product of cart; index as i"
+          class="flex mb-3"
+        >
+          <label class="block relative cursor-pointer pl-[20px]">
+            <input
+              type="checkbox"
+              class="invisible peer"
+              [(ngModel)]="product.chose"
+              (change)="chose(product)"
+            />
+            <span
+              class="absolute top-0 left-0 h-[20px] w-[20px] bg-[#eee] peer-checked:bg-black peer-checked:after:block after:absolute after:hidden after:w-[5px] after:h-[10px] after:top-[5px] after:left-[7px] after:border-[3px] after:border-t-0 after:border-l-0 after:border-white after:rotate-45"
+            ></span>
+          </label>
+          <div class="w-[126px] relative group">
+            <div class="relative">
+              <img
+                src="{{ IMAGE_API }}/image/product/{{
+                  product.picked.color.product_image1
+                }}"
+                alt="{{ product.product_name }}"
+                class="w-full"
+              />
+              <img
+                src="{{ IMAGE_API }}/image/product/{{
+                  product.picked.color.product_image2 ||
+                    product.picked.color.product_image3 ||
+                    product.picked.color.product_image4 ||
+                    product.picked.color.product_image5
+                }}"
+                alt="{{ product.product_name }}"
+                class="absolute top-0 left-0 w-full opacity-0 group-hover:opacity-100 transition-all duration-500"
+              />
+              <div
+                (click)="_cartService.removeProductFromCart(product.cart_id)"
+                class="absolute bottom-0 h-[30px] hidden justify-center items-center w-full bg-[rgba(0,0,0,0.3)] group-hover:flex cursor-pointer"
+              >
+                <button>
+                  <i class="bx bxs-trash-alt text-xl text-white"></i>
+                </button>
+              </div>
+            </div>
+            <div
+              *ngIf="product.product_discount != 0"
+              class="absolute top-[6px] left-0 w-[40px] text-center text-xs leading-[20px] bg-[#222] text-white"
+            >
+              -{{ product.product_discount }}%
+            </div>
+          </div>
+          <div class="ml-[20px] flex-1">
+            <a
+              [routerLink]="['/detail']"
+              [queryParams]="{ product_id: product.product_id }"
+              class="hover:underline"
+            >
+              <span class="text-sm mb-[5px]">{{ product.product_name }}</span>
+            </a>
+            <div class="flex pt-[15px] -mx-[10px]">
+              <select
+                [ngModel]="product.picked.color.color_id"
+                (ngModelChange)="_cartService.changeColorInCart($event, product, i)"
+                class="mx-[10px] border border-solid text-[#222] font-bold rounded-[18px] text-sm px-3 py-1 border-gray-300 focus:border-black focus:outline-none"
+              >
+                <option
+                  *ngFor="let color of product.colors"
+                  [ngValue]="color.color_id"
+                >
+                  {{ color.color_name}}
+                </option>
+              </select>
+              <select
+                [ngModel]="product.picked.size.size_id"
+                (ngModelChange)="_cartService.changeSizeInCart($event, product, i)"
+                class="mx-[10px] border border-solid text-[#222] font-bold rounded-[18px] text-sm px-3 py-1 border-gray-300 focus:border-black focus:outline-none"
+              >
+                <option
+                  *ngFor="let size of product.picked.color.sizes"
+                  [ngValue]="size.size_id"
+                >
+                  {{ size.size_name  + ' (Còn'+ size.quantity + ' sản phẩm)' }}
+                </option>
+              </select>
+            </div>
+            <div class="pt-[15px] flex justify-between items-center">
+              <div class="flex mt-[5px] h-[30px] items-center">
+                <button
+                  (click)="_cartService.decreaseInCart(product)"
+                  class="w-[25px] h-[28px] border border-gray-300 focus:border-black flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px]"
+                >
+                  <i class="bx bx-minus"></i>
+                </button>
+                <input
+                  (blur)="_cartService.editCart(product, product)"
+                  (keypress)="_cartService.validateNumber($event, product)"
+                  [(ngModel)]="product.picked.quantity"
+                  type="text"
+                  class="text-[13px] w-[34px] h-[28px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center"
+                />
+                <button
+                (click)="_cartService.increaseInCart(product)"
+                  class="w-[25px] h-[28px] border border-gray-300 focus:border-black flex items-center justify-center rounded-tr-[100px] rounded-br-[100px]"
+                >
+                  <i class="bx bx-plus"></i>
+                </button>
+              </div>
+              <div class="flex flex-col">
+                <span
+                  *ngIf="product.product_discount == 0"
+                  class="text-black font-bold text-sm"
+                >
+                  {{
+                    product.picked.color.product_price * product.picked.quantity
+                      | number
+                  }}₫
+                </span>
+              </div>
+              <div
+                *ngIf="product.product_discount != 0"
+                class="flex flex-col text-sm"
+              >
+                <span class="text-[#fa6338] font-bold">
+                  {{
+                    (product.picked.color.product_price -
+                      (product.picked.color.product_price *
+                        product.product_discount) /
+                        100) *
+                      product.picked.quantity | number
+                  }}₫
+                </span>
+                <del class="text-[#999] text-xs">
+                  {{
+                    product.picked.color.product_price * product.picked.quantity
+                      | number
+                  }}₫
+                </del>
+              </div>
+            </div>
+            <div
+              *ngIf="product.picked.quantity > product.picked.size.quantity"
+              class="text-xs font-normal text-red-500 mt-[15px] italic"
+            >
+              Số lượng sản phẩm này trong giỏ hàng đã vượt quá số lượng trong
+              kho, vui lòng chọn số lượng phù hợp trước khi đặt hàng
+            </div>
+          </div>
+        </div>
+
+        <!-- Discount -->
+        <div class="my-[25px] h-[40px] relative">
+          <input
+            type="text"
+            placeholder="Mã giảm giá"
+            class="h-full w-full border border-[rgb(0 0 0 / 10%)] pl-3 pr-14 focus:outline-none focus:border-black text-sm"
+          />
+          <button
+            class="absolute top-0 right-0 h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-[#fa6338] hover:bg-[#d73211]"
+          >
+            Áp dụng
+          </button>
+        </div>
+
+        <!-- Total -->
+        <div class="py-[15px] border-t border-b border-dashed border-[#e5e5e5]">
+          <div class="flex justify-between text-sm mb-[15px]">
+            <p>Tạm tính</p>
+            <p>{{ total_price | number }}₫</p>
+          </div>
+          <div class="flex justify-between text-sm mb-[15px]">
+            <p>Giảm giá</p>
+            <p>0đ</p>
+          </div>
+          <div class="flex justify-between text-sm">
+            <p>Phí giao hàng</p>
+            <p>Miễn phí</p>
+          </div>
+          <div class="flex justify-between text-sm mt-[15px]">
+            <p>Thuế VAT</p>
+            <p>Giá sản phẩm đã bao gồm VAT</p>
+          </div>
+        </div>
+        <div class="my-[20px]">
+          <div class="flex justify-between text-sm mb-[15px]">
+            <p>Tổng cộng</p>
+            <p class="text-2xl font-bold text-[#fa6338]">
+              {{ total_price | number }}₫
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

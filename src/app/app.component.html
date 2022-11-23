@@ -1,3 +1,12 @@
-<app-header></app-header>
+<app-header
+  [is_show_modal_login]="is_show_modal_login"
+  [is_login]="is_login"
+  (showLoginEvent)="showModalLogin($event)"
+></app-header>
 <router-outlet></router-outlet>
 <app-footer></app-footer>
+<app-auth
+  *ngIf="is_show_modal_login && !is_login"
+  [is_show_modal_login]="is_show_modal_login"
+  (showLoginEvent)="showModalLogin($event)"
+></app-auth>

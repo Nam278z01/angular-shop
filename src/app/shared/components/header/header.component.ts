@@ -1,26 +1,32 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output, Injector } from '@angular/core';
 
-import { ApiService } from 'src/app/core/services/api.service';
 import { Category } from './../../../core/entities/category';
-import { DataService } from './../../../core/services/data.service';
+import { Customer } from 'src/app/core/entities/customer';
+import { Cart } from 'src/app/core/entities/cart';
+import { Utils } from 'src/app/core/common/utils';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent extends Utils implements OnInit {
+  @Output() showLoginEvent = new EventEmitter<boolean>();
+  @Input() is_show_modal_login: boolean;
+  @Input() is_login: boolean;
+
   categories: Category[];
   text_search: string | undefined;
   searchParams: any;
+  customer: Customer;
+  cart: Cart[];
+  isShowCart: boolean = false;
 
   constructor(
-    private _apiService: ApiService,
-    private _dataService: DataService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+   injector: Injector
+  ) {
+    super(injector);
+  }
 
   ngOnInit(): void {
     this._apiService
@@ -30,6 +36,12 @@ export class HeaderComponent implements OnInit {
         this._dataService.sendCategories(this.categories);
         // console.log(this.categories);
       });
+
+    this._dataService.customer$.subscribe(res => this.customer = res);
+
+    this._cartService.cart$.subscribe((res: Cart[]) => {
+      this.cart = res;
+    })
   }
 
   search() {
@@ -57,5 +69,13 @@ export class HeaderComponent implements OnInit {
         queryParams: { text_search: this.text_search },
       });
     }
+  }
+
+  showModalLogin() {
+    this.showLoginEvent.emit(!this.is_show_modal_login)
+  }
+
+  logout() {
+    this._authService.logout();
   }
 }

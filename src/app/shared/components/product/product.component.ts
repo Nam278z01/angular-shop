@@ -1,29 +1,28 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Injector } from '@angular/core';
 
 import { Product } from 'src/app/core/entities/product';
-import { environment } from 'src/environments/environment';
 import { Color } from 'src/app/core/entities/color';
+import { Utils } from './../../../core/common/utils';
+import { Size } from 'src/app/core/entities/size';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
-  host: {'class': 'w-1/4 px-[10px]'}
 })
-export class ProductComponent implements OnInit {
+export class ProductComponent  extends Utils implements OnInit {
 
   @Input() product: Product;
-  IMAGE_API: string;
 
-  constructor() { }
+  constructor(injector: Injector) {
+    super(injector);
+  }
 
   ngOnInit(): void {
-    this.IMAGE_API = environment.IMAGE_API;
   }
 
   changeColor (product: Product, color: Color) {
     product.picked = {};
     product.picked.color = color;
   };
-
 }

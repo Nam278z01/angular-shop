@@ -1,0 +1,109 @@
+<section
+  class="fixed top-0 bottom-0 left-0 right-0 z-50 flex"
+>
+<div
+    (click)="showModalLogin()"
+    class="absolute w-full h-full bg-[#00000080]"
+></div>
+<div class="relative m-auto w-[450px] rounded-md bg-white">
+    <form class="w-full" novalidate name="LoginForm">
+        <div class="px-[32px]">
+            <div
+                class="py-[16px] px-[12px] flex justify-between items-center"
+            >
+                <h3
+                    class="font-semibold text-[20px] text-[#2563eb]"
+                >
+                    Đăng nhập
+                </h3>
+            </div>
+            <div>
+                <div class="mt-[20px]">
+                    <div class="relative">
+                        <label
+                            for="EmailLogin"
+                            class="absolute top-0 left-[10px] cursor-pointer py-[1px] px-[5px] bg-white text-xs -translate-y-2/4 font-semibold text-[#2563eb]"
+                            >Email</label
+                        >
+                        <input
+                            [(ngModel)]="email"
+                            name="email"
+                            type="email"
+                            class="p-[15px] h-[44px] rounded text-sm w-full border focus:outline-none focus:border-[#2563eb]"
+                            name="EmailLogin"
+                            placeholder="Email của bạn"
+                            required
+                        />
+                    </div>
+                </div>
+                <div class="mt-[20px]">
+                    <div class="relative">
+                        <label
+                            for="EmailLogin"
+                            class="absolute top-0 left-[10px] cursor-pointer py-[1px] px-[5px] bg-white text-xs -translate-y-2/4 font-semibold text-[#2563eb]"
+                            >Mật khẩu</label
+                        >
+                        <input
+                            [(ngModel)]="password"
+                            name="password"
+                            type="password"
+                            class="p-[15px] h-[44px] rounded text-sm w-full border focus:outline-none focus:border-[#2563eb]"
+                            name="PassLogin"
+                            placeholder="Mật khẩu của bạn"
+                            required
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="mt-[20px]">
+                <div class="flex justify-end items-center">
+                    <a
+                        href="#"
+                        class="text-sm font-medium text-[#2563eb]"
+                        >Quên mật khẩu</a
+                    >
+                    <span
+                        class="border-l border-[#eaeaea] h-[22px] mx-[20px]"
+                    ></span>
+                    <a
+                        href="#"
+                        class="text-[#939393] text-sm font-medium"
+                        >Cần trợ giúp?</a
+                    >
+                </div>
+            </div>
+            <div class="mt-[50px] flex justify-end">
+                <button
+                    (click)="showModalLogin()"
+                    type="button"
+                    class="mr-[10px] text-[13px] border border-[#1c1e2080] text-[#1c1e2080] rounded-[50px] flex justify-center items-center px-[14px] py-[6px]"
+                >
+                    Quay lại
+                </button>
+                <button
+                    (click)="login()"
+                    type="submit"
+                    class="text-[13px] bg-gradient-to-r from-[#2563eb] to-[#6bcd87] text-white rounded-[50px] flex justify-center items-center px-[14px] py-[6px]"
+                >
+                    Đăng nhập
+                </button>
+            </div>
+        </div>
+        <div
+            class="flex justify-center items-center mt-[20px] pt-[12px] pb-[24px] px-[32px] text-sm"
+        >
+            Hoặc đăng nhập bằng:
+            <button
+                class="ml-[16px] h-[42px] w-[42px] rounded-full flex justify-center items-center bg-[#eaeaea] text-xl"
+            >
+                <i class="bx bxl-facebook text-[#3b5998]"></i>
+            </button>
+            <button
+                class="ml-[16px] h-[42px] w-[42px] rounded-full flex justify-center items-center bg-[#eaeaea]"
+            >
+                <img src="assets/image/static/gg.png" alt="" />
+            </button>
+        </div>
+    </form>
+</div>
+</section>

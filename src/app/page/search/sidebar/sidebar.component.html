@@ -44,7 +44,7 @@
       *ngIf="subcategories.length > 0"
     >
       <div class="capitalize font-bold mb-2">Theo danh mục</div>
-      <label
+      <div
         *ngFor="let sc of subcategories"
         (click)="changeSubCategories(sc)"
         class="h-[28px] capitalize flex items-center cursor-pointer"
@@ -54,7 +54,7 @@
         <span class="text-[#000000cc] font-semibold hover:text-[#fa6338]">{{
           sc.subcategory_name
         }}</span>
-      </label>
+      </div>
     </div>
     <div class="py-5 text-[13px]">
       <div class="capitalize font-bold mb-2">Khoảng giá</div>

@@ -1,1 +1,433 @@
-<p>detail works!</p>
+<div class="pb-[85px]">
+  <div class="m-auto w-[1280px]">
+    <div class="px-[40px]">
+      <!-- Bread crumb -->
+      <div class="text-xs whitespace-nowrap">
+        <div class="py-4">
+          <div class="inline-block">
+            <a [routerLink]="['/']" class="text-[#999] hover:underline hover:text-black"
+              >Trang chủ</a
+            >
+          </div>
+          <div
+            class="inline-block before:content-['/'] before:px-2 before:text-[#999]"
+          >
+            <a
+              [routerLink]="['/search']"
+              class="text-[#999] hover:underline hover:text-black"
+              >Quần áo nữ</a
+            >
+          </div>
+          <div
+            class="inline-block before:content-['/'] before:px-2 before:text-[#999]"
+          >
+            <a
+              [routerLink]="['/search']"
+              [queryParams]="{ category_id: product && product.subcategory?.category?.category_id }"
+              class="text-[#999] hover:underline hover:text-black"
+              >{{ product && product.subcategory?.category?.category_name }}</a
+            >
+          </div>
+          <div
+            class="inline-block before:content-['/'] before:px-2 before:text-[#999]"
+          >
+            <a
+              [routerLink]="['/search']"
+              [queryParams]="{ category_id: product && product.subcategory?.category?.category_id, subcategory_id: product && product.subcategory?.subcategory_id}"
+              class="text-[#999] hover:underline hover:text-black"
+              >{{ product && product.subcategory?.subcategory_name }}</a
+            >
+          </div>
+          <div
+            class="inline-block before:content-['/'] before:px-2 before:text-[#999]"
+          >
+            <a href="#" class="text-black">{{ product && product.product_name }}</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product details -->
+      <div class="flex">
+        <!-- Image -->
+        <div class="w-[730px]">
+          <div class="w-full relative group">
+            <div class="flex -mx-1 overflow-hidden">
+              <div
+                class="w-2/4 px-1 flex-shrink-0"
+                [ngClass]="{ 'skeleton h-[480px]': isLoading }"
+              >
+                <img
+                  [ngClass]="{ 'hidden': isLoading }"
+                  src="{{ IMAGE_API }}/image/product/{{
+                    product && product.picked?.color?.product_image1
+                  }}"
+                  alt="{{ product && product.product_name }}"
+                  class="w-full"
+                />
+              </div>
+              <div
+                class="w-2/4 px-1 flex-shrink-0"
+                [ngClass]="{ 'skeleton h-[480px]': isLoading }"
+              >
+                <img
+                  [ngClass]="{ 'hidden': isLoading }"
+                  src="{{ IMAGE_API }}/image/product/{{
+                    product && product.picked?.color?.product_image2
+                  }}"
+                  alt="{{ product && product.product_name }}"
+                  class="w-full"
+                />
+              </div>
+              <div
+                *ngIf="product && product.picked?.color?.product_image3"
+                class="w-2/4 px-1 flex-shrink-0"
+              >
+                <img
+                  src="{{ IMAGE_API }}/image/product/{{
+                    product && product.picked?.color?.product_image3
+                  }}"
+                  alt="{{ product && product.product_name }}"
+                  class="w-full"
+                />
+              </div>
+              <div
+                *ngIf="product && product.picked?.color?.product_image4"
+                class="w-2/4 px-1 flex-shrink-0"
+              >
+                <img
+                  src="{{ IMAGE_API }}/image/product/{{
+                    product && product.picked?.color?.product_image4
+                  }}"
+                  alt="{{ product && product.product_name }}"
+                  class="w-full"
+                />
+              </div>
+              <div
+                *ngIf="product && product.picked?.color?.product_image5"
+                class="w-2/4 px-1 flex-shrink-0"
+              >
+                <img
+                  src="{{ IMAGE_API }}/image/product/{{
+                    product && product.picked?.color?.product_image5
+                  }}"
+                  alt="{{ product && product.product_name }}"
+                  class="w-full"
+                />
+              </div>
+            </div>
+            <!-- <button
+                  class="absolute left-[15px] top-2/4 -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center hidden group-hover:flex hover:bg-white"
+              >
+                  <i class="bx bx-chevron-left"></i>
+              </button>
+              <button
+                  class="absolute right-[15px] top-2/4 -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center hidden group-hover:flex hover:bg-white"
+              >
+                  <i class="bx bx-chevron-right"></i>
+              </button> -->
+          </div>
+
+          <div class="w-full mt-2 flex justify-center">
+            <div
+              [ngClass]="{ skeleton: isLoading }"
+              class="px-[2px] w-[68px] h-[90px] cursor-pointer"
+            >
+              <img
+                [ngClass]="{ 'hidden': isLoading }"
+                src="{{ IMAGE_API }}/image/product/{{
+                  product && product.picked?.color?.product_image1
+                }}"
+                alt="{{ product && product.product_name }}"
+                class="w-full"
+              />
+            </div>
+            <div
+              *ngIf="isLoading || product && product.picked?.color?.product_image2"
+              [ngClass]="{ skeleton: isLoading }"
+              class="px-[2px] w-[68px] h-[90px] cursor-pointer"
+            >
+              <img
+                [ngClass]="{ 'hidden': isLoading }"
+                src="{{ IMAGE_API }}/image/product/{{
+                  product && product.picked?.color?.product_image2
+                }}"
+                alt="{{ product && product.product_name }}"
+                class="w-full"
+              />
+            </div>
+            <div
+              *ngIf="isLoading || product && product.picked?.color?.product_image3"
+              [ngClass]="{ skeleton: isLoading }"
+              class="px-[2px] w-[68px] h-[90px] cursor-pointer"
+            >
+              <img
+                [ngClass]="{ 'hidden': isLoading }"
+                src="{{ IMAGE_API }}/image/product/{{
+                  product && product.picked?.color?.product_image3
+                }}"
+                alt="{{ product && product.product_name }}"
+                class="w-full"
+              />
+            </div>
+            <div
+              *ngIf="isLoading || product && product.picked?.color?.product_image4"
+              [ngClass]="{ skeleton: isLoading }"
+              class="px-[2px] w-[68px] h-[90px] cursor-pointer"
+            >
+              <img
+                [ngClass]="{ 'hidden': isLoading }"
+                src="{{ IMAGE_API }}/image/product/{{
+                  product && product.picked?.color?.product_image4
+                }}"
+                alt="{{ product && product.product_name }}"
+                class="w-full"
+              />
+            </div>
+            <div
+              *ngIf="isLoading || product && product.picked?.color?.product_image5"
+              [ngClass]="{ skeleton: isLoading }"
+              class="px-[2px] w-[68px] h-[90px] cursor-pointer"
+            >
+              <img
+                [ngClass]="{ 'hidden': isLoading }"
+                src="{{ IMAGE_API }}/image/product/{{
+                  product && product.picked?.color?.product_image5
+                }}"
+                alt="{{ product && product.product_name }}"
+                class="w-full"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="ml-[50px] w-[420px]">
+          <!-- Name/Price -->
+          <div class="mb-[25px]">
+            <h1
+              [ngClass]="{ 'skeleton h-[24px] w-full': isLoading }"
+              class="text-sm mb-[5px]"
+            >
+              <span [ngClass]="{ 'hidden': isLoading }">{{ product && product.product_name }}</span>
+            </h1>
+            <div
+              [ngClass]="{ 'skeleton h-[32px] w-3/4': isLoading }"
+              class="flex items-center"
+            >
+              <!-- Normal -->
+              <span
+                [ngClass]="{ 'hidden': isLoading }"
+                *ngIf="product && product.product_discount == 0"
+                class="font-bold text-2xl text-black"
+              >
+                {{ product && product.picked?.color?.product_price | number }}₫
+              </span>
+
+              <!-- Discount -->
+              <span
+                [ngClass]="{ 'hidden': isLoading }"
+                *ngIf="product && product.product_discount != 0 && !isLoading"
+                class="text-[#fa6338] text-2xl block font-bold mr-2"
+              >
+                {{
+                  product && product.picked?.color?.product_price -
+                    (product.picked?.color?.product_price *
+                      product.product_discount) /
+                      100 | number
+                }}₫
+              </span>
+              <del
+                [ngClass]="{ 'hidden': isLoading }"
+                *ngIf="product && product.product_discount != 0 && !isLoading"
+                class="text-[#999] text-sm"
+              >
+                {{ product && product.picked?.color?.product_price | number }}₫
+              </del>
+              <div
+                [ngClass]="{ 'hidden': isLoading }"
+                *ngIf="product && product.product_discount != 0"
+                class="w-[50px] text-center text-xs leading-[20px] bg-[#222] text-white ml-3"
+              >
+                -{{ product && product.product_discount }}%
+              </div>
+            </div>
+          </div>
+
+          <!-- Color -->
+          <div class="pt-[10px] border-t border-dashed border-[#e5e5e5]">
+            <div class="mt-[15px]">
+              <div class="text-xs font-normal">
+                Màu sắc:
+                <span class="pl-[8px] font-bold text-[#222] text-sm">{{
+                  product && product.picked?.color?.color_name
+                }}</span>
+              </div>
+              <div class="pt-[15px] flex flex-wrap -mx-1">
+                <ng-container *ngIf="isLoading">
+                  <div
+                    *ngFor="let item of [].constructor(5)"
+                    class="relative w-[50px] h-[66px] mx-1 cursor-pointer skeleton"
+                  ></div>
+                </ng-container>
+
+                <ng-container *ngIf="!isLoading">
+                  <div
+                    *ngFor="let cl of product && product.colors"
+                    [ngClass]="{
+                      'before:block before:absolute before:w-full before:h-full before:top-0 before:left-0 before:border before:border-[#222] before:shadow-[inset_0_0_0_2px_#fff]':
+                        product && product.picked?.color?.color_id == cl.color_id
+                    }"
+                    (click)="changeColor(product, cl)"
+                    title="{{ cl.color_name }}"
+                    class="relative w-[50px] h-[66px] mx-1 cursor-pointer"
+                  >
+                    <img
+                      src="{{ IMAGE_API }}/image/product/{{ cl.product_image1 }}"
+                      alt="Image"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+          <!-- Size -->
+          <div>
+            <div class="mt-[15px]">
+              <div class="text-xs font-normal flex items-center">
+                <span>Kích thước:</span>
+                <span class="px-[8px] font-bold text-[#222] text-sm">{{
+                  product && product.picked?.size?.size_name
+                }}</span>
+                <span
+                  *ngIf="
+                    product && product.picked?.size && product && product.picked?.size?.quantity != 0
+                  "
+                  >(Còn {{ product && product.picked?.size?.quantity | number }} sản
+                  phẩm)</span
+                >
+                <span
+                  *ngIf="
+                    product && product.picked?.size && product && product.picked?.size?.quantity == 0
+                  "
+                  >(Đã hết sản phẩm)</span
+                >
+              </div>
+
+              <div class="mt-[15px] -mx-1 flex flex-wrap">
+                <ng-container *ngIf="isLoading">
+                  <div
+                    *ngFor="let item of [].constructor(5)"
+                    class="flex justify-center items-center w-[64px] h-[40px] m-1 text-sm font-bold rounded-2xl cursor-pointer transition-all skeleton"
+                  ></div>
+                </ng-container>
+                <ng-container *ngIf="!isLoading">
+                  <div
+                    *ngFor="let s of product && product.picked?.color?.sizes"
+                    title="Còn {{ s.quantity }} sản phẩm"
+                    (click)="changeSize(product, s)"
+                    [ngClass]="{
+                      'bg-black text-white':
+                        product && product.picked?.size?.size_id == s.size_id,
+                      'bg-stone-200': product && product.picked?.size?.size_id != s.size_id
+                    }"
+                    class="flex justify-center items-center w-[64px] h-[40px] m-1 text-sm font-bold rounded-2xl cursor-pointer transition-all"
+                  >
+                    {{ s.size_name }}
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+            <div
+              *ngIf="product && !product.picked?.size && show_warning.size"
+              class="text-xs font-normal text-red-500 italic"
+            >
+              Vui lòng chọn size
+            </div>
+          </div>
+
+          <!-- Quantity -->
+          <div>
+            <div class="mt-[15px]">
+              <div class="font-normal text-xs">Số lượng:</div>
+              <div class="flex mt-[15px] h-[30px] items-center">
+                <button
+                  (click)="decrease()"
+                  class="w-[30px] h-[35px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] focus:border-black"
+                >
+                  <i class="bx bx-minus"></i>
+                </button>
+                <input
+                  (blur)="validateQuantity(product)"
+                  (keypress)="_cartService.validateNumber($event, product)"
+                  [(ngModel)]="product && product.picked.quantity"
+                  type="text"
+                  class="text-sm w-[48px] h-[35px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center"
+                />
+                <button
+                  (click)="increase()"
+                  class="w-[30px] h-[35px] border border-gray-300 flex items-center justify-center rounded-tr-[100px] rounded-br-[100px] focus:border-black"
+                >
+                  <i class="bx bx-plus"></i>
+                </button>
+              </div>
+            </div>
+            <span
+              *ngIf="product && product.picked.quantity == product && product.picked?.size?.quantity"
+              class="text-xs font-normal text-red-500 italic"
+            >
+              Số lượng bạn chọn đã đạt mức tối đa của sản phẩm này
+            </span>
+          </div>
+
+          <div class="mt-[25px]">
+            <button
+              ng-if="addToCartInDetailsPage(product)"
+              class="h-[54px] text-[18px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
+            >
+              THÊM VÀO GIỎ HÀNG
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="px-[50px]">
+    <!-- You may also like -->
+    <div class="pb-[30px] pt-[100px] px-[10px]">
+      <span class="text-xl text-black font-semibold italic">
+        Có Thể Bạn Cũng Thích
+      </span>
+    </div>
+    <div class="w-full relative">
+      <div class="w-full flex">
+        <!-- Normal -->
+
+        <ng-container *ngIf="isLoadingSub">
+          <app-product-loading class="card w-1/5 px-[10px] flex-shrink-0"
+            *ngFor="let item of [].constructor(8)"
+          ></app-product-loading>
+        </ng-container>
+
+        <ng-container *ngIf="!isLoadingSub">
+          <app-product class="w-1/5 px-[10px] flex-shrink-0"
+            *ngFor="let p of products"
+            [product]="p"
+          ></app-product>
+        </ng-container>
+
+        <!-- <button
+              class="absolute left-[15px] top-[40%] -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center flex hover:bg-white"
+          >
+              <i class="bx bx-chevron-left"></i>
+          </button>
+          <button
+              class="absolute right-[15px] top-[40%] -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center flex hover:bg-white"
+          >
+              <i class="bx bx-chevron-right"></i>
+          </button> -->
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { StorageService } from './storage.service';
 import { Customer } from '../entities/customer';
 import { environment } from 'src/environments/environment';
+import { DataService } from './data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,11 @@ export class AuthService {
 
   host: string = environment.BASE_API;
 
-  constructor(private _http: HttpClient, private _storageService: StorageService) {
+  constructor(private _http: HttpClient, private _storageService: StorageService, private _dataService: DataService) {
 
   }
 
-  login(username: string, password: string): void {
+  login(username: string, password: string) {
     let body = {
       email: username,
       password
@@ -28,8 +29,28 @@ export class AuthService {
       headers: new HttpHeaders(header)
     }
 
-    this._http
+    return this._http
       .post<any>(this.host + '/api/login/customer', body, options)
+  }
+
+  logout() {
+    if (this.isAuthenticated()) {
+      let header: any = {}
+      header['Content-Type'] = 'application/json';
+
+      let customer = this.getLoggedInUser();
+      console.log(customer)
+      header['Authorization'] = `${customer?.token_type} ${customer?.access_token}`;
+
+      let options: any = {
+        headers: new HttpHeaders(header),
+      }
+
+      this._http.delete<any>(this.host + '/api/logout', options).subscribe((res: any) => {
+        this._storageService.removeItem('CURRENT_CUSTOMER');
+        window.location.reload();
+      });
+    }
   }
 
   isAuthenticated(): boolean {
@@ -46,10 +67,29 @@ export class AuthService {
       let userData: any = JSON.parse(this._storageService.getItem('CURRENT_CUSTOMER') ?? '{}');
       customer = new Customer();
       customer.token_type = userData.token_type;
-      customer.token = userData.token
+      customer.access_token = userData.access_token;
     } else {
       customer = null;
     }
     return customer;
+  }
+
+  getCurrentCustomer() {
+    if (this.isAuthenticated()) {
+      let header: any = {}
+      header['Content-Type'] = 'application/json';
+
+      let customer = this.getLoggedInUser();
+      console.log(customer)
+      header['Authorization'] = `${customer?.token_type} ${customer?.access_token}`;
+
+      let options: any = {
+        headers: new HttpHeaders(header),
+      }
+
+      this._http.get<Customer>(this.host + '/api/customer', options).subscribe((res: any) => {
+        this._dataService.sendCustomer(res)
+      });
+    }
   }
 }

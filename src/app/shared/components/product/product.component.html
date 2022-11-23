@@ -25,7 +25,7 @@
   >
     <div
       *ngFor="let s of product.picked.color.sizes"
-      ng-click="addToCartInProductPage(p, s)"
+      (click)="_cartService.addToCartInProductPage(product, s)"
       title="Còn {{ s.quantity }} sản phẩm"
       class="flex justify-center items-center w-[48px] h-[43px] m-1 text-sm font-bold rounded-2xl bg-white cursor-pointer transition-all hover:bg-black hover:text-white"
     >

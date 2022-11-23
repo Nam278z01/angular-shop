@@ -1,44 +1,43 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, Input, OnInit, Injector } from '@angular/core';
 
 import { Category } from './../../../core/entities/category';
 import { SubCategory } from 'src/app/core/entities/sub-category';
-import { DataService } from './../../../core/services/data.service';
+import { Utils } from './../../../core/common/utils';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
-  host: {'class': 'w-[205px] pr-[15px] pb-[10px]'}
+  host: { class: 'w-[205px] pr-[15px] pb-[10px]' },
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent extends Utils implements OnInit {
   @Input() searchParams: any;
   categories: Category[];
   subcategories: SubCategory[] = [];
 
   constructor(
-    private _dataService: DataService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+   injector: Injector
+  ) {
+    super(injector);
+  }
 
   ngOnInit(): void {
     this._dataService.categories$.subscribe((item: Category[]) => {
       this.categories = item;
       // console.log(this.categories);
 
-      this.route.queryParams.subscribe(params => {
+      this.route.queryParams.subscribe((params) => {
         if (this.categories.length > 0) {
-          this.getSubCategories()
+          this.getSubCategories();
         }
-      })
+      });
     });
 
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (this.categories.length > 0) {
-        this.getSubCategories()
+        this.getSubCategories();
       }
-    })
+    });
 
     // console.log('url', this.router.url.split('?')[0] )
     // console.log('searchParams', this.searchParams);
@@ -46,30 +45,41 @@ export class SidebarComponent implements OnInit {
 
   getSubCategories() {
     if (
-        this.searchParams.category_id &&
-        this.router.url.split('?')[0] == '/search'
+      this.searchParams.category_id &&
+      this.router.url.split('?')[0] == '/search'
     ) {
-        console.log('categories', this.categories)
-        console.log('category', this.categories.filter(category => category.category_id == this.searchParams.category_id)[0])
-        this.subcategories = this.categories.filter(category => category.category_id == this.searchParams.category_id)[0].subcategories;
+      console.log('categories', this.categories);
+      console.log(
+        'category',
+        this.categories.filter(
+          (category) => category.category_id == this.searchParams.category_id
+        )[0]
+      );
+      this.subcategories = this.categories.filter(
+        (category) => category.category_id == this.searchParams.category_id
+      )[0].subcategories;
 
-        this.subcategories.forEach((subcategory: SubCategory) => {
-          if (this.searchParams.list_subcategory_id) {
-            subcategory.checked = JSON.parse(
-              this.searchParams.list_subcategory_id
-            ).includes(subcategory.subcategory_id)
-              ? true
-              : false;
-          } else {
-            subcategory.checked = false;
-          }
-        });
+      this.subcategories.forEach((subcategory: SubCategory) => {
+        if (this.searchParams.list_subcategory_id) {
+          subcategory.checked = JSON.parse(
+            this.searchParams.list_subcategory_id
+          ).includes(subcategory.subcategory_id)
+            ? true
+            : false;
+        } else {
+          subcategory.checked = false;
+        }
+      });
 
-        console.log('subcategories', this.subcategories)
-      }
+      console.log('subcategories', this.subcategories);
+    }
   }
 
-  changeCategory(category_id: number | undefined, type: boolean, category: Category | null) {
+  changeCategory(
+    category_id: number | undefined,
+    type: boolean,
+    category: Category | null
+  ) {
     if (type) {
       return (
         this.searchParams.category_id == category_id &&
@@ -84,37 +94,40 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  changeSubCategories (subcategory: SubCategory) {
+  changeSubCategories(subcategory: SubCategory) {
     if (subcategory.checked) {
-        let arr = JSON.parse(this.searchParams.list_subcategory_id).filter(
-            (subcategory_id: any) => {
-                return subcategory_id != subcategory.subcategory_id;
-            }
-        );
-        this.searchParams.list_subcategory_id =
-            arr.length > 0 ? JSON.stringify(arr) : undefined;
+      let arr = JSON.parse(this.searchParams.list_subcategory_id).filter(
+        (subcategory_id: any) => {
+          return subcategory_id != subcategory.subcategory_id;
+        }
+      );
+      this.searchParams.list_subcategory_id =
+        arr.length > 0 ? JSON.stringify(arr) : undefined;
+      subcategory.checked = false;
     } else {
-        let arr = this.searchParams.list_subcategory_id
-            ? JSON.parse(this.searchParams.list_subcategory_id)
-            : [];
-        this.searchParams.list_subcategory_id = JSON.stringify([
-            ...arr,
-            subcategory.subcategory_id,
-        ]);
+      let arr = this.searchParams.list_subcategory_id
+        ? JSON.parse(this.searchParams.list_subcategory_id)
+        : [];
+      this.searchParams.list_subcategory_id = JSON.stringify([
+        ...arr,
+        subcategory.subcategory_id,
+      ]);
+      subcategory.checked = true;
     }
+
     this.searchParams.page = 1;
     this.router.navigate(['/search'], { queryParams: this.searchParams });
-};
+  }
 
   changePrice() {
     // console.log(this.searchParams.min_price)
     this.searchParams.page = 1;
     this.searchParams.min_price = this.searchParams.min_price
-          ? this.searchParams.min_price
-          : undefined;
+      ? this.searchParams.min_price
+      : undefined;
     this.searchParams.max_price = this.searchParams.max_price
-          ? this.searchParams.max_price
-          : undefined;
+      ? this.searchParams.max_price
+      : undefined;
     this.router.navigate(['/search'], { queryParams: this.searchParams });
-  };
+  }
 }

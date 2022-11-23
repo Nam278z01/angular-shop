@@ -1,6 +1,10 @@
 import { Color } from "./color";
 
-export class Product {
+export class Cart {
+  public cart_id: number;
+  public chose: boolean;
+  public quantity: number;
+  public size_id: number;
   public product_id: number;
   public product_name: string;
   public product_discount: number;
