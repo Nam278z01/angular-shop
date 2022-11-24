@@ -85,6 +85,6 @@ export class CartComponent extends Utils implements OnInit, OnDestroy {
   };
 
   checkout() {
-
+    this.toastr.success('predict bitcoin price machine learning');
   }
 }

@@ -115,6 +115,9 @@ img {
   -ms-interpolation-mode: nearest-neighbor; /* IE (non-standard property) */
 }
 
+// Toast
+@import 'ngx-toastr/toastr';
+
 // swiper
 @import "swiper/css";
 @import "swiper/css/free-mode";

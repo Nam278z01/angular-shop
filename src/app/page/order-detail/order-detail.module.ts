@@ -2,18 +2,19 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from 'src/app/shared/shared.module';
-import { HomeComponent } from "./home.component";
+import { OrderDetailComponent } from './order-detail.component';
+
 
 @NgModule({
   declarations: [
-    HomeComponent,
+    OrderDetailComponent,
   ],
   imports: [
     SharedModule,
     RouterModule.forChild([
-      { path: '', component: HomeComponent }
-    ]),
+      { path: '', component: OrderDetailComponent }
+    ])
   ],
   providers: [],
 })
-export class HomeModule {}
+export class OrderDetailModule {}

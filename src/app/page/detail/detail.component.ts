@@ -103,16 +103,16 @@ export class DetailComponent extends Utils implements OnInit, OnDestroy {
                     product_new.picked.quantity)
                 : this.cart.unshift(product_new);
 
-              // $rootScope.showCart();
+              this.toastr.success('Thêm vào giỏ thành công!');
               this._cartService.sendCart(this.cart);
               this._cartService.recalculateTotalPrice();
             } else {
-              // $rootScope.showSnackbar(`Bạn đã có ${res.quantity_in_cart} sản phẩm trong này giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`);
+              this.toastr.warning('Số lượng sản phẩm vừa thêm và trong giỏ đã vượt quá số lượng tồn kho!');
             }
             product.picked.size.quantity = res.quantity_in_stock;
           });
       } else {
-        // $rootScope.showSnackbar("Sản phẩm đã hết hàng!");
+        this.toastr.warning('Sản phẩm đã hết hàng!');
       }
     } else {
       this.show_warning.size = true;
@@ -170,9 +170,7 @@ export class DetailComponent extends Utils implements OnInit, OnDestroy {
           product.picked.size.quantity < product.picked.quantity
         ) {
           product.picked.quantity = product.picked.size.quantity;
-          // $rootScope.showSnackbar(
-          //     `Sản phẩm này chỉ còn tối đa ${product.picked.size.quantity} cái!`
-          // );
+          this.toastr.warning(`Sản phẩm này chỉ còn tối đa ${product.picked.size.quantity} cái!`);
         }
         if (!product.picked.quantity) {
           product.picked.quantity = 1;

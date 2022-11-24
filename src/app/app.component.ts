@@ -18,10 +18,8 @@ export class AppComponent extends Utils {
   }
 
   ngOnInit(): void {
-    console.log('auth', this._authService.isAuthenticated())
+    // console.log('auth', this._authService.isAuthenticated())
     this.is_login = this._authService.isAuthenticated();
-
-    this._authService.getCurrentCustomer();
   }
 
   showModalLogin(value: boolean) {

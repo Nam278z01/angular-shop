@@ -14,7 +14,7 @@ export class AuthService {
   host: string = environment.BASE_API;
 
   constructor(private _http: HttpClient, private _storageService: StorageService, private _dataService: DataService) {
-
+    this.getCurrentCustomer();
   }
 
   login(username: string, password: string) {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 import { StorageService } from './storage.service';
 import { Cart } from '../entities/cart';
@@ -22,7 +23,8 @@ export class CartService {
 
   constructor(
     private _apiService: ApiService,
-    private _storageService: StorageService
+    private _storageService: StorageService,
+    private toastr: ToastrService
   ) {
     this.getCart();
 
@@ -94,16 +96,14 @@ export class CartService {
             this.cart.next(this.clonedCart);
             this.recalculateTotalPrice();
 
-            // $rootScope.showCart();
+            this.toastr.success('Thêm vào giỏ thành công!');
           } else {
-            // $rootScope.showSnackbar(
-            //     `Bạn đã có ${res.data.quantity_in_cart} sản phẩm trong này giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`
-            // );
+            this.toastr.warning('Số lượng sản phẩm vừa thêm và trong giỏ đã vượt quá số lượng tồn kho!');
           }
           size.quantity = res.quantity_in_stock;
         });
     } else {
-      // $rootScope.showSnackbar("Sản phẩm đã hết hàng!");
+      this.toastr.warning('Sản phẩm đã hết hàng!');
     }
   }
 
@@ -132,11 +132,9 @@ export class CartService {
           product.picked.size.quantity = res.quantity_in_stock;
         } else {
           if (res.quantity_in_stock) {
-            // $rootScope.showSnackbar(
-            //     `Sản phẩm này chỉ còn tối đa ${res.data.quantity_in_stock} cái!`
-            // );
+            this.toastr.warning(`Sản phẩm này chỉ còn tối đa ${res.data.quantity_in_stock} cái!`);
           } else {
-            // $rootScope.showSnackbar(`Sản phẩm này đã hết hàng!`);
+            this.toastr.warning('Sản phẩm này đã hết hàng!');
           }
 
           if (typeof product_old === 'object') {
@@ -228,9 +226,7 @@ export class CartService {
       product.picked.quantity++;
       this.editCart(product);
     } else {
-      // $rootScope.showSnackbar(
-      //     `Sản phẩm này chỉ còn tối đa ${product.picked.size.quantity} cái!`
-      // );
+      this.toastr.warning(`Sản phẩm này chỉ còn tối đa ${product.picked.size.quantity} cái!`);
     }
   }
 
