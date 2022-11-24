@@ -7,7 +7,7 @@ import { OrderComponent } from './page/order/order.component';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', loadChildren: () => import('./page/home/home.module').then(m => m.HomeModule) },
   { path: 'search', loadChildren: () => import('./page/search/search.module').then(m => m.SearchModule) },
   { path: 'detail', loadChildren: () => import('./page/detail/detail.module').then(m => m.DetailModule) },
   { path: 'cart', loadChildren: () => import('./page/cart/cart.module').then(m => m.CartModule) },

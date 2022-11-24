@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewEncapsulation } from '@angular/core';
 
 import { Product } from 'src/app/core/entities/product';
 import { Utils } from './../../core/common/utils';

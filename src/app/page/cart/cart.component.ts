@@ -1,4 +1,5 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { Utils } from './../../core/common/utils';
 import { Customer } from './../../core/entities/customer';
@@ -9,13 +10,14 @@ import { Cart } from 'src/app/core/entities/cart';
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss']
 })
-export class CartComponent extends Utils implements OnInit {
+export class CartComponent extends Utils implements OnInit, OnDestroy {
 
   customer: Customer;
   cart: Cart[];
   total_price: number;
   chose_all: any;
   isPaying: boolean = false;
+  subscriptions: Subscription[] = [];
 
   constructor(injector: Injector) {
     super(injector);
@@ -28,15 +30,22 @@ export class CartComponent extends Utils implements OnInit {
 
     this._dataService.customer$.subscribe(res => this.customer = res);
 
-    this._cartService.cart$.subscribe((res: Cart[]) => {
-      this.cart = res;
+    this.subscriptions.push(
+      this._cartService.cart$.subscribe((res: Cart[]) => {
+        this.cart = res;
 
-      this.chose_all = {
-        value:
-            this.cart.filter((product) => product.chose).length == this.cart.length,
-      };
-    })
+        this.chose_all = {
+          value:
+              this.cart.filter((product) => product.chose).length == this.cart.length,
+        };
+        console.log('cart from cart');
+      })
+    );
 
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   choseAll() {

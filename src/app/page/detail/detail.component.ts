@@ -1,29 +1,42 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+
+// import Swiper core and required modules
+import SwiperCore, { FreeMode, Navigation, Thumbs, Pagination } from 'swiper';
+
+// install Swiper modules
+SwiperCore.use([FreeMode, Navigation, Thumbs, Pagination]);
 
 import { Product } from 'src/app/core/entities/product';
 import { Color } from 'src/app/core/entities/color';
 import { Size } from 'src/app/core/entities/size';
 import { Utils } from './../../core/common/utils';
+import { Cart } from 'src/app/core/entities/cart';
 
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss'],
 })
-export class DetailComponent extends Utils implements OnInit {
+export class DetailComponent extends Utils implements OnInit, OnDestroy {
+  thumbsSwiper: any;
+
   product: Product;
   products: Product[];
   isLoading: boolean = true;
   isLoadingSub: boolean = true;
   show_warning: any = {};
+  cart: Cart[];
+  subscriptions: Subscription[] = [];
 
-  constructor(
-   injector: Injector
-  ) {
+  constructor(injector: Injector) {
     super(injector);
   }
 
   ngOnInit(): void {
+    // Reload component
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
     this.route.queryParams.subscribe((params) => {
       let product_id = params['product_id'];
 
@@ -32,6 +45,17 @@ export class DetailComponent extends Utils implements OnInit {
 
       this.getProduct(product_id);
     });
+
+    this.subscriptions.push(
+      this._cartService.cart$.subscribe((res: Cart[]) => {
+        this.cart = res;
+        console.log('cart from detail');
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   getProduct(product_id: string) {
@@ -48,6 +72,51 @@ export class DetailComponent extends Utils implements OnInit {
         this.getProductBySubCategory(this.product);
         this.isLoading = false;
       });
+  }
+
+  addToCartInDetailsPage(product: Product) {
+    let cart = JSON.parse(this._storageService.getItem('CART') || '[]');
+
+    let product_new = JSON.parse(JSON.stringify(product));
+    product_new.cart_id = Math.floor(Date.now() * Math.random());
+    if (product_new.picked.size) {
+      if (product_new.picked.size.quantity != 0) {
+        this._apiService
+          .post('/api/cart2', {
+            cart: cart,
+            product: {
+              cart_id: product_new.cart_id,
+              product_id: product_new.product_id,
+              size_id: product_new.picked.size.size_id,
+              quantity: product_new.picked.quantity,
+            },
+          })
+          .subscribe((res: any) => {
+            if (res.status == 'success') {
+              this._storageService.setItem('CART', res.cart);
+
+              let index = this.cart.findIndex(
+                (p) => p.picked.size.size_id == product_new.picked.size.size_id
+              );
+              index != -1
+                ? (this.cart[index].picked.quantity +=
+                    product_new.picked.quantity)
+                : this.cart.unshift(product_new);
+
+              // $rootScope.showCart();
+              this._cartService.sendCart(this.cart);
+              this._cartService.recalculateTotalPrice();
+            } else {
+              // $rootScope.showSnackbar(`Bạn đã có ${res.quantity_in_cart} sản phẩm trong này giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`);
+            }
+            product.picked.size.quantity = res.quantity_in_stock;
+          });
+      } else {
+        // $rootScope.showSnackbar("Sản phẩm đã hết hàng!");
+      }
+    } else {
+      this.show_warning.size = true;
+    }
   }
 
   changeColor(product: Product, color: Color) {
@@ -120,13 +189,15 @@ export class DetailComponent extends Utils implements OnInit {
 
   getProductBySubCategory(product: Product) {
     this._apiService
-      .get<Product>(`/api/product/get-by-subcategory/${product.subcategory_id}/${product.product_id}`)
+      .get<Product>(
+        `/api/product/get-by-subcategory/${product.subcategory_id}/${product.product_id}`
+      )
       .subscribe((res: any) => {
         this.products = res;
         if (this.products) {
           this.products.forEach((product) => {
-              product.picked = {};
-              product.picked.color = product.colors[0];
+            product.picked = {};
+            product.picked.color = product.colors[0];
           });
         }
         console.log(res);
