@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/components/header/header.component';
@@ -29,6 +30,7 @@ import { LoginComponent } from './shared/components/login/login.component';
       progressBar: true,
       preventDuplicates: true,
     }),
+    LoadingBarRouterModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

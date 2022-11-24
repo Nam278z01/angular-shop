@@ -54,6 +54,8 @@ export class CartService {
         });
       });
 
+      this.recalculateTotalPrice();
+
       this.cart.next(res);
     });
   }

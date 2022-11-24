@@ -61,7 +61,7 @@ export class CartComponent extends Utils implements OnInit, OnDestroy {
         product.chose = this.chose_all.value;
     });
 
-    // this._cartService.sendCart(this.cart);
+    this._cartService.sendCart(this.cart);
     this._cartService.recalculateTotalPrice();
   }
 
@@ -80,11 +80,52 @@ export class CartComponent extends Utils implements OnInit, OnDestroy {
             return product.chose;
         }).length == this.cart.length;
 
-    // this._cartService.sendCart(this.cart);
+    this._cartService.sendCart(this.cart);
     this._cartService.recalculateTotalPrice();
   };
 
   checkout() {
-    this.toastr.success('predict bitcoin price machine learning');
+    if (!this._authService.isAuthenticated()) {
+      this.toastr.warning('Vui lòng đăng nhập trước khi đặt hàng!');
+      return false;
+    }
+    let quantity = this.cart.filter(product => product.chose).length
+    if (!this.isPaying && quantity) {
+      this.isPaying = true;
+      let cart = JSON.parse(this._storageService.getItem('CART') || '[]');
+
+      this._apiService.post('/api/order2', {
+        cart: cart,
+        customer: {
+          customer_name: this.customer.customer_name,
+          customer_address: this.customer.customer_address,
+          customer_phone: this.customer.customer_phone,
+          note: this.customer.note || '',
+        }
+      }).subscribe((res: any) => {
+        if (res.status == "success") {
+          this.cart = this.cart.filter(
+              (product) => !product.chose
+          );
+          this.isPaying = false;
+          this._storageService.setItem('CART', cart.filter(((item: any) => !item.chose)));
+
+          this._cartService.sendCart(this.cart);
+          this._cartService.recalculateTotalPrice();
+
+          this.toastr.success('Đặt hàng thành công!');
+          this.router.navigate(['/order-detail'], { queryParams: {order_id: res.order_id} });
+      } else {
+          // Get Cart
+          this.isPaying = false;
+          this._cartService.getCart();
+          this.toastr.warning('Không thể đặt hàng do có sản phẩm có số lượng đặt vượt quá số lượng trong kho hàng!');
+      }
+      })
+    }
+    if (!quantity) {
+        this.toastr.warning('Vui lòng chọn sản phẩm cần đặt hàng!');
+    }
+    return true;
   }
 }

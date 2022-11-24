@@ -1,1 +1,354 @@
-<p>order-detail works!</p>
+<div class="bg-[#fafafc] py-[30px]">
+  <div class="w-[1200px] mx-auto flex relative">
+    <div class="w-[180px] flex-shrink-0">
+      <div class="sticky top-[84px] bg-[#fafafc]">
+        <div class="py-[15px] border-b border-[#efefef] flex">
+          <a class="block w-[50px] h-[50px]">
+            <img
+              *ngIf="customer.image"
+              class="w-full h-full rounded-full"
+              src="assets/image/static/{{ customer.image }}"
+              alt="Avatar"
+            />
+          </a>
+          <div
+            class="text-sm pl-[15px] flex flex-col flex-1 overflow-hidden justify-center"
+          >
+            <div
+              class="text-[#333] font-bold text-ellipsis whitespace-nowrap overflow-hidden mb-[5px]"
+            >
+              {{ customer.customer_name }}
+            </div>
+            <div class="text-[#888] cursor-pointer flex items-center italic">
+              <i class="bx bx-edit-alt text-sm"></i>
+              <span class="ml-[5px] font-semibold text-xs">Sửa hồ sơ</span>
+            </div>
+          </div>
+        </div>
+        <div class="my-[30px]">
+          <div class="flex items-center mb-[12px] hover:text-[#fa6338]">
+            <i class="bx bx-user text-xl"></i>
+            <span class="text-[13px] font-semibold ml-[8px]"
+              >Tài Khoản Của Tôi</span
+            >
+          </div>
+          <a
+            routerLink="/orders"
+            class="flex items-center mb-[12px] hover:text-[#fa6338]"
+          >
+            <i class="bx bx-food-menu text-xl"></i>
+            <span class="text-[13px] font-semibold ml-[8px]"
+              >Đơn Hàng Của Tôi</span
+            >
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="order"
+      class="w-[980px] flex-shrink-0 flex-grow ml-[40px] shadow-[0_6px_12px_0_#0000000a]"
+    >
+      <div class="mt-[12px]">
+        <div class="pt-[24px] px-[24px] pb-[12px] bg-white">
+          <div class="text-[15px] pb-[12px] flex justify-between">
+            <span class="text-black font-bold text-xs italic"
+              >ID ĐƠN HÀNG: {{ order.order_id }}</span
+            >
+            <span
+              class="font-bold text-xs text-white px-[7px] py-[3px] rounded-[2px]"
+              [ngClass]="{
+                'bg-[#777]':
+                  order.orderstates[order.orderstates.length - 1]
+                    .orderstate_name == '0',
+                'bg-[#00a65a]':
+                  order.orderstates[order.orderstates.length - 1]
+                    .orderstate_name == '1',
+                'bg-[#3c8dbc]':
+                  order.orderstates[order.orderstates.length - 1]
+                    .orderstate_name == '2',
+                'bg-[#dd4b39]':
+                  order.orderstates[order.orderstates.length - 1]
+                    .orderstate_name == '3',
+                'bg-[#f39c12]':
+                  order.orderstates[order.orderstates.length - 1]
+                    .orderstate_name == '4'
+              }"
+              >{{
+                order.orderstates[order.orderstates.length - 1].orderstate_name
+                  | orderState
+              }}</span
+            >
+          </div>
+          <div
+            class="py-[10px] text-xs font-bold text-[#fa6338] border-t border-[#eaeaea] text-center"
+          >
+            Cảm ơn bạn đã mua sắm tại Shop Sheyn!
+          </div>
+          <div
+            class="relative py-[30px] border-t border-[#eaeaea] rounded-br rounded-bl flex justify-between"
+          >
+            <div
+              *ngIf="order.orderstates.length > 1"
+              class="absolute top-[58px] h-1 w-full"
+            >
+              <div
+                class="absolute h-full w-[calc(100%-140px)] mx-[70px] bg-white"
+              ></div>
+              <div
+                class="absolute h-full w-[calc(100%-140px)] mx-[70px] bg-[#2dc258]"
+              ></div>
+            </div>
+            <div
+              *ngFor="let os of order.orderstates"
+              [ngClass]="{ 'm-auto': order.orderstates.length == 1 }"
+              class="relative w-[140px] text-center"
+            >
+              <div
+                class="bg-white m-auto w-[60px] h-[60px] flex justify-center items-center rounded-full border-[4px] border-[#2dc258] text-[#2dc258]"
+              >
+                <i
+                  [ngClass]="{
+                    'bx-food-menu': os.orderstate_name == 0,
+                    'bx-car': os.orderstate_name == 1,
+                    'bx-download': os.orderstate_name == 2,
+                    'bx-error-alt': os.orderstate_name == 3,
+                    'bx-undo': os.orderstate_name == 4
+                  }"
+                  class="bx text-2xl font-bold"
+                ></i>
+              </div>
+              <div class="text-[rgba(0,0,0,.8)] text-[13px] mt-[20px] mb-1">
+                {{ os.orderstate_name | orderState }}
+              </div>
+              <div class="text-[rgba(0,0,0,.26)] text-xs">
+                {{ os.orderstate_date | date: "HH:mm dd-MM-yyyy" }}
+              </div>
+            </div>
+          </div>
+          <div
+            class="py-[20px] border-t border-[#eaeaea] rounded-br rounded-bl"
+          >
+            <div class="pb-[12px] text-sm font-medium">Địa Chỉ Nhận Hàng</div>
+            <div class="flex">
+              <div class="pt-[10px] pr-[24px] flex-1">
+                <div
+                  class="text-[13px] font-medium mb-[8px] text-[rgba(0,0,0,.8)]"
+                >
+                  {{ order.customer_name }}
+                </div>
+                <div class="text-xs leading-[22px] text-[rgba(0,0,0,.54)]">
+                  <p>{{ order.customer_phone }}</p>
+                  {{ order.customer_address }}
+                </div>
+              </div>
+              <div
+                class="w-[600px] pt-[4px] pl-[24px] border-l border-[rgba(0,0,0,.09)]"
+              >
+                <div
+                  *ngFor="
+                    let os of order.orderstates.slice().reverse();
+                    index as i
+                  "
+                  class="relative"
+                >
+                  <div
+                    *ngIf="i != order.orderstates.length - 1"
+                    class="absolute w-[1px] h-full top-[12px] left-[5px] bg-[#d8d8d8]"
+                  ></div>
+                  <div
+                    class="relative flex items-center h-[32px] text-[rgba(0,0,0,.8)] text-[13px]"
+                  >
+                    <div
+                      [ngClass]="{
+                        'bg-[#26aa99]': i == 0,
+                        'bg-[#d8d8d8]': i != 0
+                      }"
+                      class="w-[11px] h-[11px] mr-[8px] rounded-full"
+                    ></div>
+                    <div class="mr-3">
+                      {{ os.orderstate_date | date: "HH:mm dd-MM-yyyy" }}
+                    </div>
+                    <div
+                      [ngClass]="{
+                        'text-[#26aa99]': i == 0,
+                        'text-[rgba(0,0,0,.54)]': i != 0
+                      }"
+                    >
+                      {{ os.orderstate_name | orderState }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-[#eaeaea] rounded-br rounded-bl">
+            <a
+              *ngFor="let od of order.orderdetails"
+              routerLink="/detail"
+              [queryParams]="{ product_id: od.size.color.product.product_id }"
+              class="flex pt-[12px] justify-between"
+            >
+              <div class="flex">
+                <div class="w-[90px] border border-[#e1e1e1] relative group">
+                  <img
+                    class="w-full h-full"
+                    src="{{ IMAGE_API }}/image/product/{{
+                      od.size.color.product_image1
+                    }}"
+                    alt="{{ od.size.color.product.product_name }}"
+                  />
+                  <img
+                    src="{{ IMAGE_API }}/image/product/{{
+                      od.size.color.product_image2 ||
+                        od.size.color.product_image3 ||
+                        od.size.color.product_image4 ||
+                        od.size.color.product_image5
+                    }}"
+                    alt="{{ od.size.color.product.product_name }}"
+                    class="absolute top-0 left-0 w-full opacity-0 group-hover:opacity-100 transition-all duration-500"
+                  />
+                </div>
+                <div class="pl-[12px]">
+                  <div class="text-[13px] mb-[5px] hover:underline">
+                    {{ od.size.color.product.product_name }}
+                  </div>
+                  <div class="text-[#0000008a] text-[13px] mb-[5px]">
+                    Phân loại hàng: Màu {{ od.size.color.color_name }}, Size
+                    {{ od.size.size_name }}
+                  </div>
+                  <div class="text-sm mb-[5px]">x{{ od.product_quantity }}</div>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <!-- Normal -->
+                <span
+                  *ngIf="od.product_discount == 0"
+                  class="font-semibold text-xl text-black"
+                >
+                  {{ od.price * od.product_quantity | number }}₫
+                </span>
+
+                <!-- Discount -->
+                <span
+                  *ngIf="od.product_discount != 0"
+                  class="text-[#fa6338] text-lg block font-semibold mr-2"
+                >
+                  {{
+                    (od.price - (od.price * od.product_discount) / 100) *
+                      od.product_quantity | number
+                  }}₫
+                </span>
+                <del
+                  *ngIf="od.product_discount != 0"
+                  class="text-[#999] text-sm"
+                >
+                  {{ od.price * od.product_quantity | number }}₫
+                </del>
+                <div
+                  *ngIf="od.product_discount != 0"
+                  class="w-[50px] text-center text-xs leading-[20px] bg-[#222] text-white ml-3"
+                >
+                  -{{ od.product_discount }}%
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="mt-[12px] border-t border-[#eaeaea]">
+            <div
+              class="border-b border-dotted border-[rgba(0,0,0,.09)] flex items-center justify-end w-full text-right"
+            >
+              <div
+                class="flex-1 py-[13px] px-[10px] text-xs text-[rgba(0,0,0,.54)]"
+              >
+                Tổng tiền hàng
+              </div>
+              <div
+                class="w-[240px] text-[rgba(0,0,0,.8)] py-[13px] text-sm border-l border-dotted border-[rgba(0,0,0,.09)]"
+              >
+                {{ order.total | number }}₫
+              </div>
+            </div>
+            <div
+              class="border-b border-dotted border-[rgba(0,0,0,.09)] flex items-center justify-end w-full text-right"
+            >
+              <div
+                class="flex-1 py-[13px] px-[10px] text-xs text-[rgba(0,0,0,.54)]"
+              >
+                Phí vận chuyển
+              </div>
+              <div
+                class="w-[240px] text-[rgba(0,0,0,.8)] py-[13px] text-sm border-l border-dotted border-[rgba(0,0,0,.09)]"
+              >
+                Miễn phí
+              </div>
+            </div>
+            <div
+              class="border-b border-dotted border-[rgba(0,0,0,.09)] flex items-center justify-end w-full text-right"
+            >
+              <div
+                class="flex-1 py-[13px] px-[10px] text-xs text-[rgba(0,0,0,.54)]"
+              >
+                Tổng số tiền
+              </div>
+              <div
+                class="w-[240px] text-[#fa6338] py-[13px] text-2xl font-bold border-l border-dotted border-[rgba(0,0,0,.09)]"
+              >
+                {{ order.total | number }}₫
+              </div>
+            </div>
+            <div
+              class="border-b border-dotted border-[rgba(0,0,0,.09)] flex items-center justify-end w-full text-right"
+            >
+              <div
+                class="flex-1 py-[13px] px-[10px] text-xs text-[rgba(0,0,0,.54)]"
+              >
+                Phương thức Thanh toán
+              </div>
+              <div
+                class="w-[240px] text-[rgba(0,0,0,.8)] py-[13px] text-sm border-l border-dotted border-[rgba(0,0,0,.09)]"
+              >
+                Thanh toán khi nhận hàng
+              </div>
+            </div>
+            <div
+              class="border-b border-dotted border-[rgba(0,0,0,.09)] flex items-center justify-end w-full text-right"
+            >
+              <div
+                class="flex-1 py-[13px] px-[10px] text-xs text-[rgba(0,0,0,.54)]"
+              >
+                Thuế VAT
+              </div>
+              <div
+                class="w-[240px] text-[rgba(0,0,0,.8)] py-[13px] text-sm border-l border-dotted border-[rgba(0,0,0,.09)]"
+              >
+                Giá sản phẩm đã bao gồm VAT
+              </div>
+            </div>
+          </div>
+          <div class="mt-[12px] py-[16px] flex justify-between items-center">
+            <div class="flex">
+              <button
+                (click)="updateOrderState(3)"
+                *ngIf="order.orderstates.length == 1"
+                class="mr-[15px] flex justify-center items-center h-[36px] text-[13px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
+              >
+                Hủy đơn hàng
+              </button>
+              <button
+                (click)="updateOrderState(4)"
+                *ngIf="
+                  order.orderstates[order.orderstates.length - 1]
+                    .orderstate_name == 2
+                "
+                class="mr-[15px] flex justify-center items-center h-[36px] text-[13px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
+              >
+                Hoàn trả đơn hàng
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

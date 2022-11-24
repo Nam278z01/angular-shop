@@ -40,7 +40,7 @@ export class ApiService {
     header['Content-Type'] = 'application/json';
 
     if (withToken) {
-      header['Authorization'] = `${this.customer?.token_type}${this.customer?.access_token}`;
+      header['Authorization'] = `${this.customer?.token_type} ${this.customer?.access_token}`;
     }
 
     let options: any = {
@@ -57,12 +57,12 @@ export class ApiService {
     header['Content-Type'] = 'application/json';
 
     if (withToken) {
-      header['Authorization'] = `${this.customer?.token_type}${this.customer?.access_token}`;
+      header['Authorization'] = `${this.customer?.token_type} ${this.customer?.access_token}`;
     }
 
     let options: any = {
       headers: new HttpHeaders(header),
-      params: this.getHttpParams(params),
+      params: this.getHttpParams(params)
     }
 
     return this._http
@@ -74,12 +74,12 @@ export class ApiService {
     header['Content-Type'] = 'application/json';
 
     if (withToken) {
-      header['Authorization'] = `${this.customer?.token_type}${this.customer?.access_token}`;
+      header['Authorization'] = `${this.customer?.token_type} ${this.customer?.access_token}`;
     }
 
     let options: any = {
       headers: new HttpHeaders(header),
-      params: this.getHttpParams(params),
+      params: this.getHttpParams(params)
     }
 
     return this._http
