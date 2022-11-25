@@ -28,6 +28,7 @@ export class DetailComponent extends Utils implements OnInit, OnDestroy {
   show_warning: any = {};
   cart: Cart[];
   subscriptions: Subscription[] = [];
+  isAdding: boolean = false;
 
   constructor(injector: Injector) {
     super(injector);
@@ -75,47 +76,54 @@ export class DetailComponent extends Utils implements OnInit, OnDestroy {
   }
 
   addToCartInDetailsPage(product: Product) {
-    let cart = JSON.parse(this._storageService.getItem('CART') || '[]');
+    if (!this.isAdding) {
+      this.isAdding = true;
 
-    let product_new = JSON.parse(JSON.stringify(product));
-    product_new.cart_id = Math.floor(Date.now() * Math.random());
-    if (product_new.picked.size) {
-      if (product_new.picked.size.quantity != 0) {
-        this._apiService
-          .post('/api/cart2', {
-            cart: cart,
-            product: {
-              cart_id: product_new.cart_id,
-              product_id: product_new.product_id,
-              size_id: product_new.picked.size.size_id,
-              quantity: product_new.picked.quantity,
-            },
-          })
-          .subscribe((res: any) => {
-            if (res.status == 'success') {
-              this._storageService.setItem('CART', res.cart);
+      let cart = JSON.parse(this._storageService.getItem('CART') || '[]');
 
-              let index = this.cart.findIndex(
-                (p) => p.picked.size.size_id == product_new.picked.size.size_id
-              );
-              index != -1
-                ? (this.cart[index].picked.quantity +=
-                    product_new.picked.quantity)
-                : this.cart.unshift(product_new);
+      let product_new = JSON.parse(JSON.stringify(product));
+      product_new.cart_id = Math.floor(Date.now() * Math.random());
+      if (product_new.picked.size) {
+        if (product_new.picked.size.quantity != 0) {
+          this._apiService
+            .post('/api/cart2', {
+              cart: cart,
+              product: {
+                cart_id: product_new.cart_id,
+                product_id: product_new.product_id,
+                size_id: product_new.picked.size.size_id,
+                quantity: product_new.picked.quantity,
+              },
+            })
+            .subscribe((res: any) => {
+              if (res.status == 'success') {
+                this._storageService.setItem('CART', res.cart);
 
-              this.toastr.success('Thêm vào giỏ thành công!');
-              this._cartService.sendCart(this.cart);
-              this._cartService.recalculateTotalPrice();
-            } else {
-              this.toastr.warning('Số lượng sản phẩm vừa thêm và trong giỏ đã vượt quá số lượng tồn kho!');
-            }
-            product.picked.size.quantity = res.quantity_in_stock;
-          });
+                let index = this.cart.findIndex(
+                  (p) => p.picked.size.size_id == product_new.picked.size.size_id
+                );
+                index != -1
+                  ? (this.cart[index].picked.quantity +=
+                      product_new.picked.quantity)
+                  : this.cart.unshift(product_new);
+
+                this.toastr.success('Thêm vào giỏ thành công!');
+                this._cartService.sendCart(this.cart);
+                this._cartService.recalculateTotalPrice();
+              } else {
+                this.toastr.warning('Số lượng sản phẩm vừa thêm và trong giỏ đã vượt quá số lượng tồn kho!');
+              }
+              product.picked.size.quantity = res.quantity_in_stock;
+              this.isAdding = false;
+            });
+        } else {
+          this.toastr.warning('Sản phẩm đã hết hàng!');
+          this.isAdding = false;
+        }
       } else {
-        this.toastr.warning('Sản phẩm đã hết hàng!');
+        this.show_warning.size = true;
+        this.isAdding = false;
       }
-    } else {
-      this.show_warning.size = true;
     }
   }
 

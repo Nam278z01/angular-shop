@@ -1,0 +1,61 @@
+<div class="px-[50px] pt-[20px]">
+  <swiper
+    style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff"
+    [loop]="true"
+    [navigation]="true"
+    [slidesPerView]="1"
+    [autoplay]="{ delay: 3000, disableOnInteraction: false }"
+    class="mySwiper2"
+  >
+    <ng-template swiperSlide
+      ><img
+        src="assets/image/static/16688292707daca67c9a44597ed3fd9e16f6cc8ff9_thumbnail_1920x.webp" /></ng-template
+    ><ng-template swiperSlide
+      ><img
+        src="assets/image/static/166763848090944a2c2bfba41b636a3251f9042a98_thumbnail_1920x.webp"
+    /></ng-template>
+  </swiper>
+</div>
+
+<div class="px-[50px]">
+  <!-- You may also like -->
+  <div class="pb-[30px] pt-[30px] px-[10px]">
+    <span class="text-xl text-black font-semibold italic">
+      Có Thể Bạn Cũng Thích
+    </span>
+  </div>
+  <div class="w-full relative">
+    <div class="w-full flex">
+      <!-- Normal -->
+      <ng-container *ngIf="isLoadingSub">
+        <app-product-loading
+          class="card w-1/5 px-[10px] flex-shrink-0"
+          *ngFor="let item of [].constructor(5)"
+        ></app-product-loading>
+      </ng-container>
+
+      <swiper
+        *ngIf="!isLoadingSub"
+        style="
+            --swiper-navigation-color: #fff;
+            --swiper-pagination-color: #000;
+          "
+        [loop]="true"
+        [slidesPerView]="5"
+        [spaceBetween]="10"
+        [navigation]="true"
+        [pagination]="{
+          clickable: true
+        }"
+        class="mySwiper3"
+      >
+        <ng-template swiperSlide *ngFor="let p of products">
+          <app-product
+            class="w-full"
+            [product]="p"
+          ></app-product>
+        </ng-template>
+      </swiper>
+    </div>
+  </div>
+</div>
