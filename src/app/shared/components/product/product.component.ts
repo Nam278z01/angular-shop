@@ -16,7 +16,7 @@ export class ProductComponent  extends Utils implements OnInit {
 
   constructor(injector: Injector) {
     super(injector);
-  }
+  }//
 
   ngOnInit(): void {
   }
